@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class PatientDTO {
+public class PatientDTO implements Comparable<PatientDTO> {
 
     @SerializedName("uuid")
     @Expose
@@ -56,7 +56,6 @@ public class PatientDTO {
     @SerializedName("gender")
     @Expose
     private String gender;
-
 
     private String patientPhoto;
 
@@ -227,5 +226,10 @@ public class PatientDTO {
 
     public void setPatientPhoto(String patientPhoto) {
         this.patientPhoto = patientPhoto;
+    }
+
+    @Override
+    public int compareTo(PatientDTO o) {
+        return this.firstname.compareTo(o.firstname);
     }
 }

@@ -79,8 +79,4 @@ public class ObsDTO {
     public String getObsServerModifiedDate() {
         return obsServerModifiedDate;
     }
-
-    public void setObsServerModifiedDate(String obsServerModifiedDate) {
-        this.obsServerModifiedDate = obsServerModifiedDate;
-    }
 }

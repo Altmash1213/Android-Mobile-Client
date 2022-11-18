@@ -19,6 +19,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import org.intelehealth.app.models.dto.ConceptAttributeDTO;
 import org.intelehealth.app.utilities.Logger;
 import org.intelehealth.app.utilities.NotificationID;
 import org.intelehealth.app.utilities.PatientsFrameJson;
@@ -33,6 +34,7 @@ import org.intelehealth.app.models.dto.VisitDTO;
 import org.intelehealth.app.models.pushRequestApiCall.PushRequestApiCall;
 import org.intelehealth.app.models.pushResponseApiCall.PushResponseApiCall;
 import org.intelehealth.app.utilities.exception.DAOException;
+
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableSingleObserver;
@@ -62,6 +64,8 @@ public class SyncDAO {
         LocationDAO locationDAO = new LocationDAO();
         ProviderDAO providerDAO = new ProviderDAO();
         VisitAttributeListDAO visitAttributeListDAO = new VisitAttributeListDAO();
+        ConceptAttributeTypeDAO conceptAttributeTypeDAO = new ConceptAttributeTypeDAO();
+        ConceptAttributeListDAO conceptAttributeListDAO = new ConceptAttributeListDAO();
         ProviderAttributeLIstDAO providerAttributeLIstDAO = new ProviderAttributeLIstDAO();
         try {
             Logger.logD(TAG, "pull sync started");
@@ -77,6 +81,8 @@ public class SyncDAO {
             providerAttributeLIstDAO.insertProvidersAttributeList
                     (responseDTO.getData().getProviderAttributeList());
             visitAttributeListDAO.insertProvidersAttributeList(responseDTO.getData().getVisitAttributeList());
+            conceptAttributeTypeDAO.insertConcepts(responseDTO.getData().getConceptAttributeTypeList());
+            conceptAttributeListDAO.insertConceptAttributeList(responseDTO.getData().getConceptAttributeList());
 //            visitsDAO.insertVisitAttribToDB(responseDTO.getData().getVisitAttributeList())
 
             Logger.logD(TAG, "Pull ENCOUNTER: " + responseDTO.getData().getEncounterDTO());
@@ -302,8 +308,7 @@ public class SyncDAO {
         return true;
     }
 
-    public void setLocale(String appLanguage)
-    {
+    public void setLocale(String appLanguage) {
         Locale locale = new Locale(appLanguage);
         Locale.setDefault(locale);
         Configuration config = new Configuration();
@@ -340,6 +345,7 @@ public class SyncDAO {
         if (cursor != null) {
             if (cursor.moveToFirst()) {
                 do {
+                    Boolean hasPrescription = hasPrescription(cursor);
                     activePatientList.add(new ActivePatientModel(
                             cursor.getString(cursor.getColumnIndexOrThrow("uuid")),
                             cursor.getString(cursor.getColumnIndexOrThrow("patientuuid")),
@@ -351,7 +357,8 @@ public class SyncDAO {
                             cursor.getString(cursor.getColumnIndexOrThrow("last_name")),
                             cursor.getString(cursor.getColumnIndexOrThrow("date_of_birth")),
                             "",
-                            ""
+                            "",
+                            hasPrescription
                     ));
                 } while (cursor.moveToNext());
             }
@@ -469,5 +476,17 @@ public class SyncDAO {
         finalTime = time + " " + context.getString(R.string.ago);
 
         sessionManager.setLastTimeAgo(finalTime);
+    }
+
+    private boolean hasPrescription(Cursor cursor) {
+        boolean hasPrescription = false;
+        String query = "SELECT COUNT(*) FROM tbl_encounter WHERE encounter_type_uuid = 'bd1fbfaa-f5fb-4ebd-b75c-564506fc309e' AND visituuid = ?";
+        Cursor countCursor = db.rawQuery(query, new String[]{cursor.getString(cursor.getColumnIndexOrThrow("uuid"))});
+        countCursor.moveToFirst();
+        int count = countCursor.getInt(0);
+        countCursor.close();
+        if (count == 1)
+            hasPrescription = true;
+        return hasPrescription;
     }
 }

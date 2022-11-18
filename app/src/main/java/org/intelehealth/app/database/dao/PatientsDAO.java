@@ -10,6 +10,8 @@ import android.database.sqlite.SQLiteDatabase;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import org.intelehealth.app.models.FamilyMemberRes;
@@ -126,6 +128,53 @@ public class PatientsDAO {
 
     }
 
+    public boolean SurveyupdatePatientToDB(String uuid, List<PatientAttributesDTO> patientAttributesDTOS) throws DAOException {
+        boolean isCreated = true;
+        long createdRecordsCount1 = 0;
+        SQLiteDatabase db = AppConstants.inteleHealthDatabaseHelper.getWriteDb();
+        ContentValues values = new ContentValues();
+        String whereclause = "Uuid=?";
+        db.beginTransaction();
+        List<PatientAttributesDTO> patientAttributesList = new ArrayList<PatientAttributesDTO>();
+        try {
+
+            Logger.logD("create", "create has to happen");
+            values.put("uuid", uuid);
+            /*values.put("openmrs_id", patientDTO.getOpenmrs_id());
+            values.put("first_name", patientDTO.getFirst_name());
+            values.put("middle_name", patientDTO.getMiddle_name());
+            values.put("last_name", patientDTO.getLast_name());
+            values.put("phone_number", patientDTO.getPhone_number());
+            values.put("address1", patientDTO.getAddress1());
+            values.put("address2", patientDTO.getAddress2());
+            values.put("country", patientDTO.getCountry());
+            values.put("date_of_birth", patientDTO.getDate_of_birth());
+            values.put("gender", patientDTO.getGender());
+            values.put("postal_code", patientDTO.getPostal_code());
+            values.put("city_village", patientDTO.getCity_village());
+            values.put("state_province", patientDTO.getState_province());
+            values.put("modified_date", AppConstants.dateAndTimeUtils.currentDateTime());
+            values.put("patient_photo", patientDTO.getPatient_photo());*/
+            values.put("dead", false);
+            values.put("sync", false);
+
+            insertPatientAttributes(patientAttributesDTOS, db);
+            Logger.logD("pulldata", "datadumper" + values);
+
+            createdRecordsCount1 = db.update("tbl_patient", values, whereclause, new String[]{uuid});
+            db.setTransactionSuccessful();
+            Logger.logD("created records", "created records count" + createdRecordsCount1);
+        } catch (SQLException e) {
+            isCreated = false;
+            throw new DAOException(e.getMessage(), e);
+        } finally {
+            db.endTransaction();
+        }
+        return isCreated;
+
+    }
+
+
     public boolean updatePatientToDB(Patient patientDTO, String uuid, List<PatientAttributesDTO> patientAttributesDTOS) throws DAOException {
         boolean isCreated = true;
         long createdRecordsCount1 = 0;
@@ -158,6 +207,7 @@ public class PatientsDAO {
 
             insertPatientAttributes(patientAttributesDTOS, db);
             Logger.logD("pulldata", "datadumper" + values);
+
             createdRecordsCount1 = db.update("tbl_patient", values, whereclause, new String[]{uuid});
             db.setTransactionSuccessful();
             Logger.logD("created records", "created records count" + createdRecordsCount1);
@@ -230,7 +280,8 @@ public class PatientsDAO {
         SQLiteDatabase db = AppConstants.inteleHealthDatabaseHelper.getWriteDb();
         db.beginTransaction();
         try {
-            Cursor idCursor = db.rawQuery("SELECT value FROM tbl_patient_attribute where patientuuid = ? AND person_attribute_type_uuid=? AND voided='0' COLLATE NOCASE", new String[]{patientuuid, "10720d1a-1471-431b-be28-285d64767093"});
+            Cursor idCursor = db.rawQuery("SELECT value FROM tbl_patient_attribute where patientuuid = ? AND person_attribute_type_uuid=? AND voided='0' COLLATE NOCASE",
+                    new String[]{patientuuid, "be8e386b-ca22-447d-82a1-b80366e5f848"});
 
             if (idCursor.getCount() != 0) {
                 while (idCursor.moveToNext()) {
@@ -251,14 +302,16 @@ public class PatientsDAO {
     //Fetch all patient UUID's from HouseHoldValue
     public List<String> getPatientUUIDs(String houseHoldValue) throws DAOException {
         List<String> patientUUIDs = new ArrayList<>();
+        LinkedHashSet<String> patientUUIDs_hashset = new LinkedHashSet<>();
         SQLiteDatabase db = AppConstants.inteleHealthDatabaseHelper.getWriteDb();
         db.beginTransaction();
         try {
-            Cursor cursor = db.rawQuery("SELECT patientuuid FROM tbl_patient_attribute where value = ? AND sync='0' COLLATE NOCASE", new String[]{houseHoldValue});
+            Cursor cursor = db.rawQuery("SELECT patientuuid FROM tbl_patient_attribute where value = ? AND (sync='0' OR sync='TRUE') COLLATE NOCASE",
+                    new String[]{houseHoldValue});
 
             if (cursor.getCount() != 0) {
                 while (cursor.moveToNext()) {
-                    patientUUIDs.add(cursor.getString(cursor.getColumnIndexOrThrow("patientuuid")));
+                    patientUUIDs_hashset.add(cursor.getString(cursor.getColumnIndexOrThrow("patientuuid")));
                 }
             }
             cursor.close();
@@ -268,6 +321,8 @@ public class PatientsDAO {
         } finally {
             db.endTransaction();
         }
+
+        patientUUIDs.addAll(patientUUIDs_hashset);
         return patientUUIDs;
     }
 
@@ -278,12 +333,13 @@ public class PatientsDAO {
         SQLiteDatabase db = AppConstants.inteleHealthDatabaseHelper.getWriteDb();
         db.beginTransaction();
         try {
-            Cursor cursor = db.rawQuery("SELECT openmrs_id,first_name,middle_name,last_name FROM tbl_patient where uuid = ? COLLATE NOCASE", new String[]{patientuuid});
+            Cursor cursor = db.rawQuery("SELECT uuid, openmrs_id,first_name,middle_name,last_name FROM tbl_patient where uuid = ? COLLATE NOCASE", new String[]{patientuuid});
             if (cursor.getCount() != 0) {
                 while (cursor.moveToNext()) {
                     FamilyMemberRes familyMemberRes = new FamilyMemberRes();
+                    familyMemberRes.setPatientUUID(cursor.getString(cursor.getColumnIndexOrThrow("uuid")));
                     familyMemberRes.setOpenMRSID(cursor.getString(cursor.getColumnIndexOrThrow("openmrs_id")));
-                    familyMemberRes.setName(cursor.getString(cursor.getColumnIndexOrThrow("first_name"))+ " " + cursor.getString(cursor.getColumnIndexOrThrow("last_name")));
+                    familyMemberRes.setName(cursor.getString(cursor.getColumnIndexOrThrow("first_name")) + " " + cursor.getString(cursor.getColumnIndexOrThrow("last_name")));
                     listPatientNames.add(familyMemberRes);
 //                  middle_name = cursor.getString(cursor.getColumnIndexOrThrow("middle_name"));
                 }
@@ -530,6 +586,5 @@ public class PatientsDAO {
 
         return gender;
     }
-
 
 }

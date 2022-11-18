@@ -173,9 +173,11 @@ public class AdditionalDocumentsActivity extends AppCompatActivity {
                 final String finalFilePath = AppConstants.IMAGE_PATH + finalImageName + ".jpg";
                 BitmapUtils.copyFile(picturePath, finalFilePath);
                 compressImageAndSave(finalFilePath);
+
             }
         }
     }
+
     private void updateImageDatabase(String imageuuid) {
         ImagesDAO imagesDAO = new ImagesDAO();
         try {

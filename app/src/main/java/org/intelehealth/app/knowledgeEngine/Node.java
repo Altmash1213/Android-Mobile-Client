@@ -37,6 +37,7 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.gson.Gson;
 
 import org.intelehealth.app.models.AnswerResult;
+import org.intelehealth.app.utilities.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -52,6 +53,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.intelehealth.app.R;
 import org.intelehealth.app.activities.questionNodeActivity.QuestionsAdapter;
@@ -1010,46 +1012,40 @@ public class Node implements Serializable {
 
     public static void askDate(final Node node, final Activity context, final QuestionsAdapter adapter) {
         Calendar calendar = Calendar.getInstance();
+        AtomicReference<String> dateString = new AtomicReference<>("");
         DatePickerDialog datePickerDialog = new DatePickerDialog(context,
                 android.R.style.Theme_Holo_Light_Dialog_NoActionBar,
-                new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        Calendar cal = Calendar.getInstance();
-                        cal.setTimeInMillis(0);
-                        cal.set(year, monthOfYear, dayOfMonth);
-                        Date date = cal.getTime();
-                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MMM/yyyy", Locale.ENGLISH);
-                        String dateString = simpleDateFormat.format(date);
-                        if (!dateString.equalsIgnoreCase("")) {
-                            if (node.getLanguage().contains("_")) {
-                                node.setLanguage(node.getLanguage().replace("_", dateString));
-                            } else {
-                                node.addLanguage(dateString);
-                                //knowledgeEngine.setText(knowledgeEngine.getLanguage());
-                            }
-                            node.setSelected(true);
-                        } else {
-                            if (node.isRequired()) {
-                                node.setSelected(false);
-                            } else {
-                                node.setSelected(true);
-                                if (node.getLanguage().contains("_")) {
-                                    node.setLanguage(node.getLanguage().replace("_", "Question not answered"));
-                                } else {
-                                    node.addLanguage("Question not answered");
-                                    //knowledgeEngine.setText(knowledgeEngine.getLanguage());
-                                }
-                            }
-                        }
+                (view, year, monthOfYear, dayOfMonth) -> {
 
-                        adapter.notifyDataSetChanged();
-                        //TODO:: Check if the language is actually what is intended to be displayed
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTimeInMillis(0);
+                    cal.set(year, monthOfYear, dayOfMonth);
+                    Date date = cal.getTime();
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MMM/yyyy", Locale.ENGLISH);
+                    dateString.set(simpleDateFormat.format(date));
+
+                    if (node.getLanguage().contains("_")) {
+                        node.setLanguage(node.getLanguage().replace("_", dateString.get()));
+                    } else {
+                        node.addLanguage(" " + dateString);
+                        node.setText(node.getLanguage());
+                        //knowledgeEngine.setText(knowledgeEngine.getLanguage());
                     }
+                    node.setSelected(true);
+                    adapter.notifyDataSetChanged();
+
+                    //TODO:: Check if the language is actually what is intended to be displayed
                 }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
         datePickerDialog.setTitle(R.string.question_date_picker);
         //Set Maximum date to current date because even after bday is less than current date it goes to check date is set after today
         //datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis() - 1000);
+
+        datePickerDialog.setOnCancelListener(dialog -> {
+            Logger.logD("String", dateString.get());
+            dateString.set("");
+            node.setLanguage(dateString.get());
+        });
+
         datePickerDialog.show();
     }
 
@@ -2572,7 +2568,7 @@ public class Node implements Serializable {
                     if ((mOptions.get(i).getText().equalsIgnoreCase("Associated symptoms"))
                             || (mOptions.get(i).getText().equalsIgnoreCase("जुड़े लक्षण"))
                             || (mOptions.get(i).getText().equalsIgnoreCase("தொடர்புடைய அறிகுறிகள்"))
-                            || (mOptions.get(i).getText().equalsIgnoreCase("ସମ୍ପର୍କିତ ଲକ୍ଷଣଗୁଡ଼ିକ"))|| (mOptions.get(i).getText().equalsIgnoreCase("સંકળાયેલ લક્ષણો")) || (mOptions.get(i).getText().equalsIgnoreCase("জড়িত লক্ষণগুলি"))) {
+                            || (mOptions.get(i).getText().equalsIgnoreCase("ସମ୍ପର୍କିତ ଲକ୍ଷଣଗୁଡ଼ିକ")) || (mOptions.get(i).getText().equalsIgnoreCase("સંકળાયેલ લક્ષણો")) || (mOptions.get(i).getText().equalsIgnoreCase("জড়িত লক্ষণগুলি"))) {
                         question = question + next_line + "Patient reports -";
                     }
                 } else {

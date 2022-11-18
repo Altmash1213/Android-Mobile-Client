@@ -50,6 +50,7 @@ public class SessionManager {
     private static final String CURRENT_LANG = "CURRENT_LANG";
     private static final String IS_LOGOUT = "IS_LOGOUT";
     private static final String HOUSEHOLD_UUID = "HOUSEHOLD_UUID";
+    private static final String NO_OFCLICKS = "NO_OFCLICKS";
     private static final String IS_FIRST_TIME_LAUNCH = "IS_FIRST_TIME_LAUNCH";
     // LogCat tag
     private static String TAG = SessionManager.class.getSimpleName();
@@ -121,6 +122,29 @@ public class SessionManager {
         editor.commit();
     }
 
+    //HouseHold
+    public String getHouseholdUuid() {
+        return pref.getString(HOUSEHOLD_UUID, "");
+    }
+
+    public void setHouseholdUuid(String UUID) {
+        editor.putString(HOUSEHOLD_UUID, UUID);
+        editor.commit();
+    }
+    //Household
+
+    // no of clicks
+    public int getNoOfclicks() {
+        return pref.getInt(NO_OFCLICKS, 0);
+    }
+
+    public void setNoOfclicks(int noOfclicks) {
+        editor.putInt(NO_OFCLICKS, noOfclicks);
+        editor.commit();
+    }
+    // no of clicks
+
+
     public String getSessionID() {
         return pref.getString(SESSION_ID, "");
     }
@@ -190,15 +214,6 @@ public class SessionManager {
 
     public void setServerUrl(String serverUrl) {
         editor.putString(KEY_PREF_SERVER_URL, serverUrl);
-        editor.commit();
-    }
-
-    public String getHouseholdUuid() {
-        return pref.getString(HOUSEHOLD_UUID, "");
-    }
-
-    public void setHouseholdUuid(String UUID) {
-        editor.putString(HOUSEHOLD_UUID, UUID);
         editor.commit();
     }
 

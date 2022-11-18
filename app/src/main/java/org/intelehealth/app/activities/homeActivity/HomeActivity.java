@@ -13,11 +13,16 @@ import static org.intelehealth.app.utilities.StringUtils.en__ta_dob;
 import static org.intelehealth.app.utilities.StringUtils.en__te_dob;
 import static org.intelehealth.app.utilities.StringUtils.getFullMonthName;
 
+import android.Manifest;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothHeadset;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -31,6 +36,7 @@ import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Build;
@@ -53,24 +59,35 @@ import android.webkit.URLUtil;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.MenuItemCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.WorkManager;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.firebase.BuildConfig;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.healthcubed.ezdxlib.bluetoothHandler.BluetoothService;
+import com.healthcubed.ezdxlib.bluetoothHandler.BluetoothStatus;
 
-import org.intelehealth.app.BuildConfig;
 import org.intelehealth.app.R;
 import org.intelehealth.app.activities.activePatientsActivity.ActivePatientActivity;
+import org.intelehealth.app.activities.devicesActivity.DevicesActivity;
 import org.intelehealth.app.activities.followuppatients.FollowUpPatientActivity;
+import org.intelehealth.app.activities.homeActivity.bluetooth.BTAdapter;
+import org.intelehealth.app.activities.householdSurvey.DraftSurveyActivity;
 import org.intelehealth.app.activities.loginActivity.LoginActivity;
 import org.intelehealth.app.activities.searchPatientActivity.SearchPatientActivity;
 import org.intelehealth.app.activities.settingsActivity.SettingsActivity;
@@ -123,7 +140,8 @@ import io.reactivex.schedulers.Schedulers;
  * Home Screen
  */
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity implements
+        BluetoothService.OnBluetoothScanCallback,BTAdapter.ItemClickListener{
 
     private static final String TAG = HomeActivity.class.getSimpleName();
     private static final String ACTION_NAME = "org.intelehealth.app.RTC_MESSAGING_EVENT";
@@ -133,9 +151,8 @@ public class HomeActivity extends AppCompatActivity {
     CountDownTimer CDT;
     private boolean hasLicense = false;
     int i = 5;
-    TextView lastSyncTextView, locationSetupTextView, appVersionTextView;
-    EditText text, url;
 
+    TextView lastSyncTextView, locationSetupTextView, appVersionTextView;
     TextView lastSyncAgo;
     CardView manualSyncButton;
     //IntentFilter filter;
@@ -147,6 +164,7 @@ public class HomeActivity extends AppCompatActivity {
 
     Context context;
     CustomProgressDialog customProgressDialog;
+    ProgressBar progress_view;
     private String mindmapURL = "";
     private DownloadMindMaps mTask;
     ProgressDialog mProgressDialog;
@@ -157,6 +175,13 @@ public class HomeActivity extends AppCompatActivity {
     TextView findPatients_textview, todaysVisits_textview,
             activeVisits_textview, appointment_textview, followup_textview, videoLibrary_textview, help_textview, tvTodayVisitsBadge, tvActiveVisitsBadge;
     private ObjectAnimator syncAnimator;
+    private BTAdapter btAdapter;
+    private boolean mScanning;
+    private BluetoothAdapter mBluetoothAdapter;
+    private BluetoothService mService;
+    private MaterialAlertDialogBuilder dialog;
+    private AlertDialog alertDialog;
+    MenuItem bluetoothCheck = null;
 
     private void saveToken() {
         Manager.getInstance().setBaseUrl("https://" + sessionManager.getServerUrl());
@@ -291,12 +316,11 @@ public class HomeActivity extends AppCompatActivity {
         checkAppVer();  //auto-update feature.
 
         Logger.logD(TAG, "onCreate: " + getFilesDir().toString());
-
         lastSyncTextView = findViewById(R.id.lastsynctextview);
         locationSetupTextView = findViewById(R.id.locationTV);
+        appVersionTextView = findViewById(R.id.app_version_text_view);
         lastSyncAgo = findViewById(R.id.lastsyncago);
         manualSyncButton = findViewById(R.id.manualsyncbutton);
-        appVersionTextView = findViewById(R.id.app_version_text_view);
 //        manualSyncButton.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
 //        c1 = findViewById(R.id.cardview_newpat);
         c2 = findViewById(R.id.cardview_find_patient);
@@ -304,6 +328,8 @@ public class HomeActivity extends AppCompatActivity {
         c4 = findViewById(R.id.cardview_active_patients);
         c5 = findViewById(R.id.cardview_video_libraby);
         c6 = findViewById(R.id.cardview_help_whatsapp);
+
+
         findViewById(R.id.cardview_appointment).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -339,6 +365,10 @@ public class HomeActivity extends AppCompatActivity {
 
         help_textview = findViewById(R.id.help_textview);
         help_textview.setText(R.string.Whatsapp_Help_Cardview);
+
+
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        mService = BluetoothService.getDefaultInstance();
 
         // manualSyncButton.setText(R.string.sync_now);
 //        manualSyncButton.setText(R.string.refresh);
@@ -567,32 +597,50 @@ public class HomeActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_home, menu);
-        return super.onCreateOptionsMenu(menu);
+        bluetoothCheck = menu.findItem(R.id.bluetooth);
 
+        if(mService.getStatus() == BluetoothStatus.CONNECTED) {
+            if(bluetoothCheck != null) {
+                bluetoothCheck.setIcon(R.drawable.bluetooth_connected);
+            }
+        }
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-//            case R.id.syncOption:
-//                refreshDatabases();
-//                return true;
+            case R.id.bluetooth:
+              showBluetoothDeviceChooseDialog(); // Here on click, will open the Dialog that will show all the nearby Bluetooth devices...
+                return true;
+
+            case R.id.draftSurvey:
+                draftSurvey();
+                return true;
+
+            case R.id.devicesOption:
+            {
+                Intent intent = new Intent(this, DevicesActivity.class);
+                startActivity(intent);
+                return true;
+            }
+
             case R.id.settingsOption:
                 settings();
                 return true;
+
             case R.id.updateProtocolsOption: {
 
 
                 if (NetworkConnection.isOnline(this)) {
 
-                    /*if (!sessionManager.getLicenseKey().isEmpty()) {
+                    if (!sessionManager.getLicenseKey().isEmpty()) {
+
                         String licenseUrl = sessionManager.getMindMapServerUrl();
                         String licenseKey = sessionManager.getLicenseKey();
                         getMindmapDownloadURL("https://" + licenseUrl + ":3004/", licenseKey);
-                        text.setText(licenseUrl);
-                        url.setText(licenseKey);
 
-                    } else { */
+                    } else {
 //                        MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(this);
 //                        // AlertDialog.Builder dialog = new AlertDialog.Builder(this,R.style.AlertDialogStyle);
 //                        LayoutInflater li = LayoutInflater.from(this);
@@ -643,18 +691,6 @@ public class HomeActivity extends AppCompatActivity {
                         MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(this);
                         LayoutInflater li = LayoutInflater.from(this);
                         View promptsView = li.inflate(R.layout.dialog_mindmap_cred, null);
-                        text = promptsView.findViewById(R.id.licensekey);
-                        url = promptsView.findViewById(R.id.licenseurl);
-
-                        if (!sessionManager.getLicenseKey().isEmpty()) {
-
-                            text.setText(sessionManager.getLicenseKey());
-                            url.setText(sessionManager.getMindMapServerUrl());
-
-                        } else {
-                            url.setText("");
-                            text.setText("");
-                        }
 
                         dialog.setTitle(getString(R.string.enter_license_key))
                                 .setView(promptsView)
@@ -665,7 +701,6 @@ public class HomeActivity extends AppCompatActivity {
                         alertDialog.setView(promptsView, 20, 0, 20, 0);
                         alertDialog.show();
                         alertDialog.setCanceledOnTouchOutside(false); //dialog wont close when clicked outside...
-
 
                         // Get the alert dialog buttons reference
                         Button positiveButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
@@ -678,9 +713,8 @@ public class HomeActivity extends AppCompatActivity {
                         positiveButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-
-                                /* text = promptsView.findViewById(R.id.licensekey);
-                                 url = promptsView.findViewById(R.id.licenseurl);*/
+                                EditText text = promptsView.findViewById(R.id.licensekey);
+                                EditText url = promptsView.findViewById(R.id.licenseurl);
 
                                 url.setError(null);
                                 text.setError(null);
@@ -753,7 +787,8 @@ public class HomeActivity extends AppCompatActivity {
 
                         IntelehealthApplication.setAlertDialogCustomTheme(this, alertDialog);
 
-//                      }
+
+                    }
 
                 } else {
                     Toast.makeText(context, getString(R.string.mindmap_internect_connection), Toast.LENGTH_SHORT).show();
@@ -834,6 +869,7 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
+
     /**
      * This method starts intent to another activity to change settings
      *
@@ -841,6 +877,11 @@ public class HomeActivity extends AppCompatActivity {
      */
     public void settings() {
         Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
+    }
+
+    public void draftSurvey() {
+        Intent intent = new Intent(this, DraftSurveyActivity.class);
         startActivity(intent);
     }
 
@@ -906,6 +947,15 @@ public class HomeActivity extends AppCompatActivity {
         super.onStart();
         IntentFilter filter = new IntentFilter(AppConstants.SYNC_INTENT_ACTION);
         registerReceiver(syncBroadcastReceiver, filter);
+
+       /* // bluetooth receiver register in oncreate
+        IntentFilter b_filter = new IntentFilter();
+        b_filter.addAction(BluetoothDevice.ACTION_ACL_CONNECTED);
+        b_filter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED);
+        b_filter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED);
+        registerReceiver(bluetoothReceiver, b_filter);
+        //end*/
+
         showBadge();
     }
 
@@ -935,6 +985,7 @@ public class HomeActivity extends AppCompatActivity {
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
+      //  unregisterReceiver(bluetoothReceiver);
     }
 
     private boolean keyVerified(String key) {
@@ -966,6 +1017,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 moveTaskToBack(true);
+               // curPrinterInterface = null;
                 // finish();
             }
         });
@@ -1138,6 +1190,37 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
+/*
+    private BroadcastReceiver bluetoothReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+
+            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+           //Device found
+            }
+            else if (BluetoothDevice.ACTION_ACL_CONNECTED.equals(action)) {
+           //Device is now connected
+                if(bluetoothCheck != null)
+                    bluetoothCheck.setIcon(R.drawable.bluetooth_connected);
+            }
+            else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
+           //Done searching
+            }
+            else if (BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED.equals(action)) {
+            //Device is about to disconnect
+            }
+            else if (BluetoothDevice.ACTION_ACL_DISCONNECTED.equals(action)) {
+            //Device has disconnected
+                if(bluetoothCheck != null)
+                    bluetoothCheck.setIcon(R.drawable.bluetooth);
+            }
+        }
+    };
+*/
+
+
     private List<Integer> mTempSyncHelperList = new ArrayList<Integer>();
     private BroadcastReceiver syncBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -1216,7 +1299,7 @@ public class HomeActivity extends AppCompatActivity {
         Intent serviceIntent = new Intent(this, CallListenerBackgroundService.class);
         if (!CallListenerBackgroundService.isInstanceCreated()) {
             //CallListenerBackgroundService.getInstance().stopForegroundService();
-            context.startService(serviceIntent);
+            ContextCompat.startForegroundService(this, serviceIntent);
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!Settings.canDrawOverlays(this)) {
@@ -1236,8 +1319,12 @@ public class HomeActivity extends AppCompatActivity {
         Log.v(TAG, "Is BG Service On - " + CallListenerBackgroundService.isInstanceCreated());
         if (!CallListenerBackgroundService.isInstanceCreated()) {
             Intent serviceIntent = new Intent(this, CallListenerBackgroundService.class);
-            context.startService(serviceIntent);
+            ContextCompat.startForegroundService(this, serviceIntent);
         }
+
+        if (mService != null)
+            mService.stopScan();
+
     }
 
     @Override
@@ -1368,6 +1455,188 @@ public class HomeActivity extends AppCompatActivity {
 
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * Method to handle the required permissions
+     *
+     * @param context Activity context as parameter
+     * @return true if all permissions are enabled
+     */
+    public static boolean initPermission(Activity context) {
+
+        String[] permissions = {Manifest.permission.BLUETOOTH,
+                Manifest.permission.BLUETOOTH_ADMIN,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION,};
+
+        List<String> mPermissionList = new ArrayList<>();
+        mPermissionList.clear();
+        for (int i = 0; i < permissions.length; i++) {
+            if (ContextCompat.checkSelfPermission(context, permissions[i]) !=
+                    PackageManager.PERMISSION_GRANTED) {
+                mPermissionList.add(permissions[i]);
+            }
+        }
+        if (mPermissionList.size() > 0) {
+            Toast.makeText(context, R.string.please_allow_permission_to_continue,
+                    Toast.LENGTH_SHORT).show();
+            ActivityCompat.requestPermissions(context, permissions, 100);
+            return false;
+        }
+
+        return true;
+    }
+
+    public void startStopScan() {
+
+        // checking for permission
+        if (!initPermission(HomeActivity.this)) {
+            return;
+        }
+
+        // checking if bluetooth is enabled
+        if (!mBluetoothAdapter.isEnabled()) {
+            Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableIntent, 101);
+            return;
+        }
+        else { // Bluetooth is turned ON.
+
+        }
+
+        // checking if location is enabled
+        if (!BluetoothService.isLocationEnabled(getApplicationContext())) {
+            Toast.makeText(getApplicationContext(),
+                    getResources().getString(R.string.please_enable_location),
+                    Toast.LENGTH_LONG).show();
+            startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+            return;
+        }
+
+        // start/stop scanning based on current state
+        if (!mScanning) {
+            mService.startScan();
+        } else {
+            mService.stopScan();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == 101 && resultCode == RESULT_OK) {
+            startStopScan();
+        }
+    }
+
+    private void showBluetoothDeviceChooseDialog() {
+        if(mService != null) {
+            mService.disconnect();
+            if(mService.getStatus().equals(BluetoothStatus.CONNECTED))
+                Toast.makeText(this, R.string.disconnected, Toast.LENGTH_SHORT).show();
+        }
+
+        // init BT adapter and service
+        mService.setOnScanCallback(this);
+        startStopScan();
+
+        // show dialog
+        dialog = new MaterialAlertDialogBuilder(this);
+        View layoutInflater = LayoutInflater.from(HomeActivity.this)
+                .inflate(R.layout.recyclerview_custom_dialog, null);
+        RecyclerView re_view = layoutInflater.findViewById(R.id.re_view);
+        progress_view = layoutInflater.findViewById(R.id.progress_view);
+        progress_view.setVisibility(View.VISIBLE);
+        re_view.setLayoutManager(new LinearLayoutManager(this));
+        btAdapter = new BTAdapter(HomeActivity.this, new ArrayList<BluetoothDevice>());
+        btAdapter.setClickListener(this);
+        re_view.setAdapter(btAdapter);
+        dialog.setView(layoutInflater);
+
+        dialog.setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if (mService != null)
+                    mService.stopScan();
+                dialogInterface.cancel();
+            }
+        });
+
+        alertDialog = dialog.create();
+        alertDialog.show();
+
+        Button pb = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+        pb.setTextColor(getResources().getColor((R.color.colorPrimary)));
+        pb.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+
+        Button nb = alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE);
+        nb.setTextColor(getResources().getColor((R.color.colorPrimary)));
+        nb.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+
+        alertDialog.setCancelable(false);
+        alertDialog.setCanceledOnTouchOutside(false);
+        IntelehealthApplication.setAlertDialogCustomTheme(this, alertDialog);
+        // end
+
+    }
+
+
+    @Override
+    public void onDeviceDiscovered(BluetoothDevice bluetoothDevice, int i) {
+        Log.v("Blue", "Ble: " + bluetoothDevice.getName());
+        progress_view.setVisibility(View.GONE);
+        // handling duplicate device list
+        int index = btAdapter.getDevices().indexOf(bluetoothDevice);
+        if (index < 0) {
+            btAdapter.getDevices().add(bluetoothDevice);
+            btAdapter.notifyItemInserted(btAdapter.getDevices().size() - 1);
+        }
+    }
+
+    @Override
+    public void onStartScan() {
+        mScanning = true;
+    }
+
+    @Override
+    public void onStopScan() {
+        mScanning = false;
+    }
+
+    @Override
+    public void onStatusChange(BluetoothStatus bluetoothStatus) {
+        if (bluetoothStatus.equals(BluetoothStatus.CONNECTED)) {
+            if(bluetoothCheck != null)
+                bluetoothCheck.setIcon(R.drawable.bluetooth_connected);
+            Toast.makeText(this, R.string.connected, Toast.LENGTH_SHORT).show();
+           // finish();
+        }
+        else {
+            if(bluetoothCheck != null)
+                bluetoothCheck.setIcon(R.drawable.bluetooth);
+        }
+
+    }
+
+    @Override
+    public void onDeviceName(String s) {
+
+    }
+
+    @Override
+    public void onToast(String s) {
+
+    }
+
+    @Override
+    public void onItemClick(BluetoothDevice bluetoothDevice) {
+        mService.connect(bluetoothDevice);
+        Toast.makeText(this, R.string.connecting_please_wait, Toast.LENGTH_SHORT).show();
+        if(alertDialog != null) {
+            alertDialog.cancel();
         }
     }
 

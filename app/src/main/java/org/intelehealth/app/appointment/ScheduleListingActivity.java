@@ -269,7 +269,10 @@ public class ScheduleListingActivity extends AppCompatActivity implements DatePi
                     @Override
                     public void onResponse(Call<SlotInfoResponse> call, retrofit2.Response<SlotInfoResponse> response) {
                         SlotInfoResponse slotInfoResponse = response.body();
-
+                        if(slotInfoResponse ==null){
+                            findViewById(R.id.llEmptyView).setVisibility(View.VISIBLE);
+                        }else{
+                            findViewById(R.id.llEmptyView).setVisibility(View.GONE);
                         SlotListingAdapter slotListingAdapter = new SlotListingAdapter(rvSlots,
                                 ScheduleListingActivity.this,
                                 slotInfoResponse.getDates(), new SlotListingAdapter.OnItemSelection() {
@@ -287,10 +290,12 @@ public class ScheduleListingActivity extends AppCompatActivity implements DatePi
                             }
                         });
                         rvSlots.setAdapter(slotListingAdapter);
+
                         if (slotListingAdapter.getItemCount() == 0) {
                             findViewById(R.id.llEmptyView).setVisibility(View.VISIBLE);
                         } else {
                             findViewById(R.id.llEmptyView).setVisibility(View.GONE);
+                        }
                         }
                     }
 

@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.widget.Button;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
@@ -15,8 +16,6 @@ public class DialogUtils {
 
     public void showOkDialog(Context context, String title, String message, String ok) {
         MaterialAlertDialogBuilder alertDialog = new MaterialAlertDialogBuilder(context);
-
-        //AlertDialog alertDialog = new AlertDialog.Builder(context,R.style.AlertDialogStyle).create();
         alertDialog.setTitle(title);
         alertDialog.setMessage(message);
         alertDialog.setPositiveButton(ok,
@@ -52,5 +51,22 @@ public class DialogUtils {
         IntelehealthApplication.setAlertDialogCustomTheme(context, dialog);
     }
 
+    public static void showInfoDialog(final AppCompatActivity activity, String msg, String title) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setMessage(msg)
+                .setPositiveButton(activity.getString(R.string.ok), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+               // .setTitle(title);
+        AlertDialog alert = builder.create();
+        alert.setCanceledOnTouchOutside(false);
+        alert.setCancelable(false);
+        alert.show();
+        Button positiveButton = alert.getButton(AlertDialog.BUTTON_POSITIVE);
+        positiveButton.setTextColor(activity.getColor(R.color.colorPrimaryDark));
+        IntelehealthApplication.setAlertDialogCustomTheme(activity, alert);
+    }
 
 }

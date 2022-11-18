@@ -1,7 +1,6 @@
 package org.intelehealth.app.activities.searchPatientActivity;
 
 import android.app.SearchManager;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -12,22 +11,10 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.provider.SearchRecentSuggestions;
-
-import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.SearchView;
-import androidx.appcompat.widget.Toolbar;
-
 import android.text.Editable;
-import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -38,16 +25,21 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
 import org.intelehealth.app.R;
+import org.intelehealth.app.activities.homeActivity.HomeActivity;
 import org.intelehealth.app.activities.identificationActivity.IdentificationActivity;
 import org.intelehealth.app.activities.privacyNoticeActivity.PrivacyNotice_Activity;
 import org.intelehealth.app.app.AppConstants;
@@ -57,10 +49,17 @@ import org.intelehealth.app.models.dto.PatientDTO;
 import org.intelehealth.app.utilities.ConfigUtils;
 import org.intelehealth.app.utilities.Logger;
 import org.intelehealth.app.utilities.SessionManager;
-
-import org.intelehealth.app.activities.homeActivity.HomeActivity;
 import org.intelehealth.app.utilities.StringUtils;
 import org.intelehealth.app.utilities.exception.DAOException;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class SearchPatientActivity extends AppCompatActivity {
     SearchView searchView;
@@ -78,6 +77,8 @@ public class SearchPatientActivity extends AppCompatActivity {
     EditText toolbarET;
     ImageView toolbarClear, toolbarSearch, toolbarFilter;
     LinearLayoutManager reLayoutManager;
+    boolean isFirstNameSelected = false, isLastNameSelected = false, isPhoneNumberSelected = false, isHouseholdNumberSelected = false, isOpenMRSIdSelected = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,7 +87,7 @@ public class SearchPatientActivity extends AppCompatActivity {
 
         Drawable drawable = ContextCompat.getDrawable(getApplicationContext(),
                 R.drawable.ic_sort_white_24dp);
-    toolbar.setOverflowIcon(drawable);
+//        toolbar.setOverflowIcon(drawable);
 
         setSupportActionBar(toolbar);
         toolbar.setTitleTextAppearance(this, R.style.ToolbarTheme);
@@ -97,32 +98,31 @@ public class SearchPatientActivity extends AppCompatActivity {
 
 
         //toolbar views
-        //toolbarET = findViewById(R.id.toolbar_ET);
+        toolbarET = findViewById(R.id.toolbar_ET);
         toolbarClear = findViewById(R.id.toolbar_clear);
         toolbarSearch = findViewById(R.id.toolbar_search);
-       toolbarFilter = findViewById(R.id.toolbar_filter);
-
-     /*   toolbarET.addTextChangedListener(new TextWatcher() {
+//        toolbarFilter = findViewById(R.id.toolbar_filter);
+        toolbarET.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 toolbarClear.setVisibility(View.VISIBLE);
                 toolbarSearch.setVisibility(View.VISIBLE);
             }
+
             @Override
             public void afterTextChanged(Editable s) {
-                if (toolbarET.getText().toString().isEmpty()){
+                if (toolbarET.getText().toString().isEmpty()) {
                     toolbarET.clearFocus();
                     toolbarClear.setVisibility(View.GONE);
                     toolbarSearch.setVisibility(View.GONE);
-                    toolbarET.notify();
                     firstQuery();
                 }
             }
-
-        });*/
+        });
         toolbarClear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -138,8 +138,7 @@ public class SearchPatientActivity extends AppCompatActivity {
             public void onClick(View v) {
                 toolbarET.clearFocus();
                 String text = toolbarET.getText().toString();
-                if(text!=null || !text.isEmpty() || text.equalsIgnoreCase(" "))
-                {
+                if (text != null || !text.isEmpty() || text.equalsIgnoreCase(" ")) {
                     SearchRecentSuggestions suggestions = new SearchRecentSuggestions(SearchPatientActivity.this,
                             SearchSuggestionProvider.AUTHORITY, SearchSuggestionProvider.MODE);
                     suggestions.clearHistory();
@@ -149,12 +148,12 @@ public class SearchPatientActivity extends AppCompatActivity {
             }
         });
 
-        toolbarFilter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                displaySingleSelectionDialog();
-            }
-        });
+//        toolbarFilter.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                displaySingleSelectionDialog();
+//            }
+//        });
 
         // Get the intent, verify the action and get the query
         sessionManager = new SessionManager(this);
@@ -193,7 +192,8 @@ public class SearchPatientActivity extends AppCompatActivity {
                 if (recycler.patients != null && recycler.patients.size() < limit) {
                     return;
                 }
-                if (!fullyLoaded && newState == RecyclerView.SCROLL_STATE_IDLE && reLayoutManager.findLastVisibleItemPosition() == recycler.getItemCount() -1) {
+                if (!fullyLoaded && newState == RecyclerView.SCROLL_STATE_IDLE && reLayoutManager.findLastVisibleItemPosition() ==
+                        recycler.getItemCount() - 1) {
                     Toast.makeText(SearchPatientActivity.this, R.string.loading_more, Toast.LENGTH_SHORT).show();
                     offset += limit;
                     List<PatientDTO> allPatientsFromDB = getAllPatientsFromDB(offset);
@@ -239,7 +239,7 @@ public class SearchPatientActivity extends AppCompatActivity {
                     startActivity(intent);
                 } else {
                     //Clear HouseHold UUID from Session for new registration
-                    //  sessionManager.setHouseholdUuid("");
+                    sessionManager.setHouseholdUuid("");
                     Intent intent = new Intent(SearchPatientActivity.this, IdentificationActivity.class);
                     startActivity(intent);
                 }
@@ -253,12 +253,58 @@ public class SearchPatientActivity extends AppCompatActivity {
         recyclerView.clearOnScrollListeners();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.search_parameters, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        item.setChecked(!item.isChecked());
+
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+
+        if (item.getItemId() == R.id.first_name_parameter) {
+            isFirstNameSelected = item.isChecked();
+            return true;
+        }
+
+        if (item.getItemId() == R.id.last_name_parameter) {
+            isLastNameSelected = item.isChecked();
+            return true;
+        }
+
+        if (item.getItemId() == R.id.phone_number_parameter) {
+            isPhoneNumberSelected = item.isChecked();
+            return true;
+        }
+
+        if (item.getItemId() == R.id.household_number_parameter) {
+            isHouseholdNumberSelected = item.isChecked();
+            return true;
+        }
+
+        if (item.getItemId() == R.id.open_mrs_id_parameter) {
+            isOpenMRSIdSelected = item.isChecked();
+            return true;
+        }
+
+        return true;
+    }
+
     private void doQuery(String query) {
         try {
-            recycler = new SearchPatientAdapter(getQueryPatients(query), SearchPatientActivity.this);
+            if (isFirstNameSelected || isLastNameSelected || isPhoneNumberSelected || isHouseholdNumberSelected || isOpenMRSIdSelected) {
+                recycler = new SearchPatientAdapter(getSearchQuery(query), SearchPatientActivity.this);
+            } else {
+                recycler = new SearchPatientAdapter(getQueryPatients(query), SearchPatientActivity.this);
+            }
             fullyLoaded = true;
             recyclerView.setAdapter(recycler);
-
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().recordException(e);
             Logger.logE("doquery", "doquery", e);
@@ -279,7 +325,7 @@ public class SearchPatientActivity extends AppCompatActivity {
                         return;
                     }
 
-                    if (!fullyLoaded && newState == RecyclerView.SCROLL_STATE_IDLE && reLayoutManager.findLastVisibleItemPosition() == recycler.getItemCount() -1) {
+                    if (!fullyLoaded && newState == RecyclerView.SCROLL_STATE_IDLE && reLayoutManager.findLastVisibleItemPosition() == recycler.getItemCount() - 1) {
                         Toast.makeText(SearchPatientActivity.this, R.string.loading_more, Toast.LENGTH_SHORT).show();
                         offset += limit;
                         List<PatientDTO> allPatientsFromDB = getAllPatientsFromDB(offset);
@@ -296,59 +342,60 @@ public class SearchPatientActivity extends AppCompatActivity {
             Logger.logE("firstquery", "exception", e);
         }
     }
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the options menu from XMLz
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_search, menu);
-        inflater.inflate(R.menu.today_filter, menu);
+
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // Inflate the options menu from XMLz
+//        MenuInflater inflater = getMenuInflater();
+//        inflater.inflate(R.menu.menu_search, menu);
 //        inflater.inflate(R.menu.today_filter, menu);
-        // Get the SearchView and set the searchable configuration
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-        searchView.setInputType(InputType.TYPE_CLASS_TEXT |
-                InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD); //to show numbers easily...
-        // Assumes current activity is the searchable activity
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+////        inflater.inflate(R.menu.today_filter, menu);
+//        // Get the SearchView and set the searchable configuration
+//        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+//        searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+//        searchView.setInputType(InputType.TYPE_CLASS_TEXT |
+//                InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD); //to show numbers easily...
+//        // Assumes current activity is the searchable activity
+//        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+//
+//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//                Log.d("Hack", "in query text change");
+//                SearchRecentSuggestions suggestions = new SearchRecentSuggestions(SearchPatientActivity.this,
+//                        SearchSuggestionProvider.AUTHORITY, SearchSuggestionProvider.MODE);
+//                suggestions.clearHistory();
+//                query = newText;
+//                doQuery(newText);
+//                return true;
+//            }
+//        });
+//
+//
+//        return super.onCreateOptionsMenu(menu);
+//    }
 
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                Log.d("Hack", "in query text change");
-                SearchRecentSuggestions suggestions = new SearchRecentSuggestions(SearchPatientActivity.this,
-                        SearchSuggestionProvider.AUTHORITY, SearchSuggestionProvider.MODE);
-                suggestions.clearHistory();
-                query = newText;
-                doQuery(newText);
-                return true;
-            }
-        });
-
-
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.summary_endAllVisit:
-                endAllVisit();
-
-            case R.id.action_filter:
-                //alert box.
-                displaySingleSelectionDialog();    //function call
-            case R.id.action_search:
-
-
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()) {
+//            case R.id.summary_endAllVisit:
+//                endAllVisit();
+//
+//            case R.id.action_filter:
+//                //alert box.
+//                displaySingleSelectionDialog();    //function call
+//            case R.id.action_search:
+//
+//
+//            default:
+//                return super.onOptionsItemSelected(item);
+//        }
+//    }
 
     /**
      * This method is called when no search result is found for patient.
@@ -472,15 +519,15 @@ public class SearchPatientActivity extends AppCompatActivity {
                 if (isChecked) {
                     // If the user checked the item, add it to the selected items
 //                    if (finalCreator_uuid != null) {
-                        selectedItems.add(finalCreator_uuid[which]);
+                    selectedItems.add(finalCreator_uuid[which]);
 //                    }
 
-                }   else if (selectedItems.contains(finalCreator_uuid[which])) {
-                // Else, if the item is already in the array, remove it
-                selectedItems.remove(finalCreator_uuid[which]);
+                } else if (selectedItems.contains(finalCreator_uuid[which])) {
+                    // Else, if the item is already in the array, remove it
+                    selectedItems.remove(finalCreator_uuid[which]);
 
 
-            }
+                }
 
             }
         });
@@ -492,17 +539,19 @@ public class SearchPatientActivity extends AppCompatActivity {
                 Logger.logD(TAG, "onclick" + i);
 //                doQueryWithProviders(query, selectedItems);
 //            }
-                if(selectedItems.isEmpty())
+                if (selectedItems.isEmpty())
                     firstQuery();
                 else
-                    doQueryWithProviders(selectedItems);            }
+                    doQueryWithProviders(selectedItems);
+            }
         });
 
 //        dialogBuilder.setNegativeButton(R.string.generic_cancel, null);
         dialogBuilder.setNegativeButton(R.string.generic_cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                firstQuery(); }
+                firstQuery();
+            }
         });
         //dialogBuilder.show();
         AlertDialog alertDialog = dialogBuilder.create();
@@ -518,6 +567,113 @@ public class SearchPatientActivity extends AppCompatActivity {
 
     }
 
+    public List<PatientDTO> getSearchQuery(String query) {
+        query = query.trim();
+        ArrayList<PatientDTO> modelList = new ArrayList<>();
+        SQLiteDatabase db = AppConstants.inteleHealthDatabaseHelper.getWritableDatabase();
+
+        // Fetching details from attributes table
+        if (isPhoneNumberSelected) {
+            String baseAttributeString = "SELECT DISTINCT patientuuid FROM tbl_patient_attribute WHERE person_attribute_type_uuid = '14d4f066-15f5-102d-96e4-000c29c2a5d7' AND value = ?";
+            ArrayList<String> patientUUIDList = new ArrayList<>();
+
+            final Cursor searchMobileCursor = db.rawQuery(baseAttributeString, new String[]{query});
+            try {
+                if (searchMobileCursor.moveToFirst()) {
+                    do {
+                        patientUUIDList.add(searchMobileCursor.getString(searchMobileCursor.getColumnIndexOrThrow("patientuuid")));
+                    } while (searchMobileCursor.moveToNext());
+                }
+            } catch (Exception e) {
+                FirebaseCrashlytics.getInstance().recordException(e);
+            }
+
+            if (patientUUIDList.size() != 0) {
+                for (int i = 0; i < patientUUIDList.size(); i++) {
+                    final Cursor cursor = db.rawQuery("SELECT * FROM tbl_patient WHERE uuid = ?", new String[]{patientUUIDList.get(i)});
+                    try {
+                        if (cursor.moveToFirst()) {
+                            do {
+                                PatientDTO model = new PatientDTO();
+                                model.setOpenmrsId(cursor.getString(cursor.getColumnIndexOrThrow("openmrs_id")));
+                                model.setFirstname(cursor.getString(cursor.getColumnIndexOrThrow("first_name")));
+                                model.setLastname(cursor.getString(cursor.getColumnIndexOrThrow("last_name")));
+                                model.setOpenmrsId(cursor.getString(cursor.getColumnIndexOrThrow("openmrs_id")));
+                                model.setMiddlename(cursor.getString(cursor.getColumnIndexOrThrow("middle_name")));
+                                model.setUuid(cursor.getString(cursor.getColumnIndexOrThrow("uuid")));
+                                model.setDateofbirth(cursor.getString(cursor.getColumnIndexOrThrow("date_of_birth")));
+                                model.setPhonenumber(StringUtils.mobileNumberEmpty(phoneNumber(cursor.getString(cursor.getColumnIndexOrThrow("uuid")))));
+                                modelList.add(model);
+                            } while (cursor.moveToNext());
+                        }
+                    } catch (DAOException e) {
+                        FirebaseCrashlytics.getInstance().recordException(e);
+                    }
+                }
+            }
+        }
+
+        // Fetching details from the tbl_patient table
+        if (isFirstNameSelected || isLastNameSelected || isOpenMRSIdSelected || isHouseholdNumberSelected) {
+            String baseString = "SELECT * FROM tbl_patient";
+
+            String firstNameParameter = getString(R.string.db_first_name) + " LIKE '%" + query + "%'";
+            String lastNameParameter = getString(R.string.db_last_name) + " LIKE '%" + query + "%'";
+            String openMRSIDParameter = getString(R.string.db_open_mrs_id) + " = '" + query + "'";
+            String householdParameter = getString(R.string.db_address_line1) + " = '" + query + "'";
+            String firstAndLastNameParameter = "(" + getString(R.string.db_first_name) + " || ' ' || " + getString(R.string.db_last_name) + ")" + " LIKE '%" + query + "%'";
+
+            if (isFirstNameSelected && isLastNameSelected) {
+                baseString = generateQuery(baseString, firstAndLastNameParameter);
+            } else if (isFirstNameSelected) {
+                baseString = generateQuery(baseString, firstNameParameter);
+            } else if (isLastNameSelected) {
+                baseString = generateQuery(baseString, lastNameParameter);
+            } else {
+
+            }
+            if (isHouseholdNumberSelected)
+                baseString = generateQuery(baseString, householdParameter);
+            if (isOpenMRSIdSelected)
+                baseString = generateQuery(baseString, openMRSIDParameter);
+
+            final Cursor searchCursor = db.rawQuery(baseString, new String[]{});
+            try {
+                if (searchCursor.moveToFirst()) {
+                    do {
+                        PatientDTO model = new PatientDTO();
+                        model.setOpenmrsId(searchCursor.getString(searchCursor.getColumnIndexOrThrow("openmrs_id")));
+                        model.setFirstname(searchCursor.getString(searchCursor.getColumnIndexOrThrow("first_name")));
+                        model.setLastname(searchCursor.getString(searchCursor.getColumnIndexOrThrow("last_name")));
+                        model.setOpenmrsId(searchCursor.getString(searchCursor.getColumnIndexOrThrow("openmrs_id")));
+                        model.setMiddlename(searchCursor.getString(searchCursor.getColumnIndexOrThrow("middle_name")));
+                        model.setUuid(searchCursor.getString(searchCursor.getColumnIndexOrThrow("uuid")));
+                        model.setDateofbirth(searchCursor.getString(searchCursor.getColumnIndexOrThrow("date_of_birth")));
+                        model.setPhonenumber(StringUtils.mobileNumberEmpty(phoneNumber(searchCursor.getString(searchCursor.getColumnIndexOrThrow("uuid")))));
+                        modelList.add(model);
+                    } while (searchCursor.moveToNext());
+                }
+            } catch (DAOException e) {
+                FirebaseCrashlytics.getInstance().recordException(e);
+            }
+        }
+
+        getUniqueValues(modelList);
+        Collections.sort(modelList);
+        return modelList;
+    }
+
+    private ArrayList<PatientDTO> getUniqueValues(ArrayList<PatientDTO> modelList) {
+        for (int i = 0; i < modelList.size() - 1; i++) {
+            for (int j = i + 1; j < modelList.size(); j++) {
+                if (modelList.get(i).getUuid().equalsIgnoreCase(modelList.get(j).getUuid()))
+                    modelList.remove(j);
+            }
+        }
+        return modelList;
+    }
+
+
     public List<PatientDTO> getQueryPatients(String query) {
         String search = query.trim().replaceAll("\\s", "");
         // search = StringUtils.mobileNumberEmpty(phoneNumber());
@@ -527,7 +683,7 @@ public class SearchPatientActivity extends AppCompatActivity {
         List<String> patientUUID_List = new ArrayList<>();
 
         final Cursor search_mobile_cursor = db.rawQuery("SELECT DISTINCT patientuuid FROM tbl_patient_attribute WHERE value = ?",
-                new String[] {search} );
+                new String[]{search});
         /* DISTINCT will get remove the duplicate values. The duplicate value will come when you have created
          * a patient with mobile no. 12345 and patient is pushed than later you edit the mobile no to
          * 12344 or something. In this case, the local db maintains two separate rows both with value: 12344 */
@@ -543,11 +699,16 @@ public class SearchPatientActivity extends AppCompatActivity {
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().recordException(e);
         }
-        Log.d("patientUUID_list", "list: "+ patientUUID_List.toString());
-        if(patientUUID_List.size() != 0) {
+        Log.d("patientUUID_list", "list: " + patientUUID_List.toString());
+        if (patientUUID_List.size() != 0) {
             for (int i = 0; i < patientUUID_List.size(); i++) {
-                final Cursor searchCursor = db.rawQuery("SELECT * FROM " + table + " WHERE first_name LIKE " + "'%" + search + "%' OR middle_name LIKE '%" + search + "%' OR uuid = ? OR last_name LIKE '%" + search + "%' OR (first_name || middle_name) LIKE '%" + search + "%' OR (middle_name || last_name) LIKE '%" + search + "%' OR (first_name || last_name) LIKE '%" + search + "%' OR openmrs_id LIKE '%" + search + "%' " + "ORDER BY first_name ASC",
+                final Cursor searchCursor = db.rawQuery("SELECT * FROM " + table + " WHERE first_name LIKE " + "'%" + search + "%' " +
+                                "OR middle_name LIKE '%" + search + "%' OR uuid = ? OR last_name LIKE '%" + search + "%' " +
+                                "OR (first_name || middle_name) LIKE '%" + search + "%' OR (middle_name || last_name) " +
+                                "LIKE '%" + search + "%' OR (first_name || last_name) LIKE '%" + search + "%' OR " +
+                                "openmrs_id LIKE '%" + search + "%' " + "ORDER BY first_name ASC",
                         new String[]{patientUUID_List.get(i)});
+
                 //  if(searchCursor.getCount() != -1) { //all values are present as per the search text entered...
                 try {
                     if (searchCursor.moveToFirst()) {
@@ -568,9 +729,13 @@ public class SearchPatientActivity extends AppCompatActivity {
                     FirebaseCrashlytics.getInstance().recordException(e);
                 }
             }
-        }
-        else {
-            final Cursor searchCursor = db.rawQuery("SELECT * FROM " + table + " WHERE first_name LIKE " + "'%" + search + "%' OR middle_name LIKE '%" + search + "%' OR last_name LIKE '%" + search + "%' OR (first_name || middle_name) LIKE '%" + search + "%' OR (middle_name || last_name) LIKE '%" + search + "%' OR (first_name || last_name) LIKE '%" + search + "%' OR openmrs_id LIKE '%" + search + "%' " + "ORDER BY first_name ASC",
+        } else {
+            final Cursor searchCursor = db.rawQuery("SELECT * FROM " + table + " WHERE first_name LIKE " + "'%" + search + "%' " +
+                            "OR middle_name LIKE '%" + search + "%' OR last_name LIKE '%" + search + "%' OR " +
+                            "(first_name || middle_name) LIKE '%" + search + "%' OR (middle_name || last_name) LIKE '%" + search + "%' OR " +
+                            "(first_name || last_name) LIKE '%" + search + "%' OR " +
+                            "openmrs_id LIKE '%" + search + "%' OR address1 LIKE '%" + search + "%' " +
+                            "ORDER BY first_name ASC",
                     null);
             //  if(searchCursor.getCount() != -1) { //all values are present as per the search text entered...
             try {
@@ -595,55 +760,55 @@ public class SearchPatientActivity extends AppCompatActivity {
         return modelList;
     }
 
-//    private void doQueryWithProviders(String querytext, List<String> providersuuids) {
-private List<PatientDTO> doQueryWithProviders(List<String> providersuuids) {
-    List<PatientDTO> modelListwihtoutQuery = new ArrayList<PatientDTO>();
+    //    private void doQueryWithProviders(String querytext, List<String> providersuuids) {
+    private List<PatientDTO> doQueryWithProviders(List<String> providersuuids) {
+        List<PatientDTO> modelListwihtoutQuery = new ArrayList<PatientDTO>();
 //        if (querytext == null) {
 //            List<PatientDTO> modelListwihtoutQuery = new ArrayList<PatientDTO>();
-            String query =
-                    "select b.openmrs_id,b.first_name,b.last_name,b.middle_name,b.uuid,b.date_of_birth from tbl_visit a, tbl_patient b, tbl_encounter c WHERE a.patientuuid = b.uuid  AND c.visituuid=a.uuid and c.provider_uuid in " +
-                            "('" + StringUtils.convertUsingStringBuilder(providersuuids) + "')  " +
-                            "group by a.uuid order by b.uuid ASC";
-            Logger.logD(TAG, query);
-            final Cursor cursor = db.rawQuery(query, null);
-            Logger.logD(TAG, "Cursour count" + cursor.getCount());
+        String query =
+                "select b.openmrs_id,b.first_name,b.last_name,b.middle_name,b.uuid,b.date_of_birth from tbl_visit a, tbl_patient b, tbl_encounter c WHERE a.patientuuid = b.uuid  AND c.visituuid=a.uuid and c.provider_uuid in " +
+                        "('" + StringUtils.convertUsingStringBuilder(providersuuids) + "')  " +
+                        "group by a.uuid order by b.uuid ASC";
+        Logger.logD(TAG, query);
+        final Cursor cursor = db.rawQuery(query, null);
+        Logger.logD(TAG, "Cursour count" + cursor.getCount());
 
-            try {
-                if (cursor != null) {
-                    if (cursor.moveToFirst()) {
-                        do {
-                            PatientDTO model = new PatientDTO();
-                            model.setOpenmrsId(cursor.getString(cursor.getColumnIndexOrThrow("openmrs_id")));
-                            model.setFirstname(cursor.getString(cursor.getColumnIndexOrThrow("first_name")));
-                            model.setLastname(cursor.getString(cursor.getColumnIndexOrThrow("last_name")));
-                            model.setMiddlename(cursor.getString(cursor.getColumnIndexOrThrow("middle_name")));
-                            model.setUuid(cursor.getString(cursor.getColumnIndexOrThrow("uuid")));
-                            model.setDateofbirth(cursor.getString(cursor.getColumnIndexOrThrow("date_of_birth")));
-                            model.setPhonenumber(StringUtils.mobileNumberEmpty(phoneNumber(cursor.getString(cursor.getColumnIndexOrThrow("uuid")))));
-                            modelListwihtoutQuery.add(model);
+        try {
+            if (cursor != null) {
+                if (cursor.moveToFirst()) {
+                    do {
+                        PatientDTO model = new PatientDTO();
+                        model.setOpenmrsId(cursor.getString(cursor.getColumnIndexOrThrow("openmrs_id")));
+                        model.setFirstname(cursor.getString(cursor.getColumnIndexOrThrow("first_name")));
+                        model.setLastname(cursor.getString(cursor.getColumnIndexOrThrow("last_name")));
+                        model.setMiddlename(cursor.getString(cursor.getColumnIndexOrThrow("middle_name")));
+                        model.setUuid(cursor.getString(cursor.getColumnIndexOrThrow("uuid")));
+                        model.setDateofbirth(cursor.getString(cursor.getColumnIndexOrThrow("date_of_birth")));
+                        model.setPhonenumber(StringUtils.mobileNumberEmpty(phoneNumber(cursor.getString(cursor.getColumnIndexOrThrow("uuid")))));
+                        modelListwihtoutQuery.add(model);
 
-                        } while (cursor.moveToNext());
-                    }
+                    } while (cursor.moveToNext());
                 }
-                if (cursor != null) {
-                    cursor.close();
-                }
-
-            } catch (DAOException e) {
-                e.printStackTrace();
+            }
+            if (cursor != null) {
+                cursor.close();
             }
 
-            try {
-                recycler = new SearchPatientAdapter(modelListwihtoutQuery, SearchPatientActivity.this);
+        } catch (DAOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            recycler = new SearchPatientAdapter(modelListwihtoutQuery, SearchPatientActivity.this);
 //            Log.i("db data", "" + getQueryPatients(query));
             /*    recyclerView.addItemDecoration(new
                         DividerItemDecoration(this,
                         DividerItemDecoration.VERTICAL));*/
-                recyclerView.setAdapter(recycler);
+            recyclerView.setAdapter(recycler);
 
-            } catch (Exception e) {
-                Logger.logE("doquery", "doquery", e);
-            }
+        } catch (Exception e) {
+            Logger.logE("doquery", "doquery", e);
+        }
 //        }else {
 //            String search = querytext.trim().replaceAll("\\s", "");
 //            List<PatientDTO> modelList = new ArrayList<PatientDTO>();
@@ -697,7 +862,7 @@ private List<PatientDTO> doQueryWithProviders(List<String> providersuuids) {
 //                Logger.logE("doquery", "doquery", e);
 //            }
 //        }
-    return modelListwihtoutQuery;
+        return modelListwihtoutQuery;
 
     }
 
@@ -724,8 +889,84 @@ private List<PatientDTO> doQueryWithProviders(List<String> providersuuids) {
     protected void onStop() {
         super.onStop();
     }
+
+    private String generateQuery(String queryString, String parameterText) {
+        // Update this query if there's any change in baseString in getSearchQuery() method
+        String baseQuery = "SELECT * FROM tbl_patient";
+
+        if (queryString.equalsIgnoreCase(baseQuery))
+            queryString = queryString.concat(" WHERE " + parameterText);
+        else
+            queryString = queryString.concat(" OR " + parameterText);
+
+        queryString = queryString.replaceAll(" +", " ");
+        return queryString;
+    }
+
+    private String generateAttributeQuery(String queryString, String parameterText) {
+        String baseQuery = "SELECT * FROM tbl_patient_attribute WHERE";
+        if (queryString.equalsIgnoreCase(baseQuery))
+            queryString = queryString.concat(" " + parameterText);
+        else
+            queryString = queryString.concat(" OR " + parameterText);
+
+        queryString = queryString.replaceAll(" +", " ");
+        return queryString;
+    }
+
+    private String removeQuery(String queryString, String parameterText) {
+        String baseQuery = "SELECT * FROM tbl_patient WHERE";
+
+        if (!queryString.contains("OR") && !parameterText.equalsIgnoreCase(baseQuery)) {
+            return baseQuery;
+        }
+
+        queryString = queryString.replace(parameterText, "").trim();
+        queryString = removeOrFromTheEnd(queryString).trim();
+        queryString = removeDuplicate(queryString);
+        queryString = queryString.replaceAll(" +", " ");
+
+        return queryString;
+    }
+
+    private String removeAttributeQuery(String queryString, String parameterText) {
+        String baseQuery = "SELECT * FROM tbl_patient_attribute WHERE";
+        if (!queryString.contains("OR") && !parameterText.equalsIgnoreCase(baseQuery)) {
+            return baseQuery;
+        }
+
+        queryString = queryString.replace(parameterText, "").trim();
+        queryString = removeOrFromTheEnd(queryString).trim();
+        queryString = removeDuplicate(queryString);
+        queryString = queryString.replaceAll(" +", " ");
+        return queryString;
+    }
+
+    private String removeDuplicate(String queryString) {
+        String[] queryArray = queryString.split(" ");
+        String finalString = "";
+        for (int i = 0; i < queryArray.length - 1; i++) {
+            if (queryArray[i].equalsIgnoreCase(queryArray[i + 1])) {
+                queryArray[i + 1] = "";
+            }
+
+            if (queryArray[i].equalsIgnoreCase("WHERE") && queryArray[i + 1].equalsIgnoreCase("OR"))
+                queryArray[i + 1] = "";
+        }
+
+        for (String words : queryArray)
+            finalString = finalString.concat(" " + words);
+        finalString = finalString.trim();
+
+        if (!finalString.equalsIgnoreCase(queryString))
+            return finalString;
+        else
+            return queryString;
+    }
+
+    private String removeOrFromTheEnd(String queryString) {
+        queryString = queryString.replaceAll("OR$", "");
+        queryString = queryString.replaceAll(" +", " ");
+        return queryString;
+    }
 }
-
-
-
-

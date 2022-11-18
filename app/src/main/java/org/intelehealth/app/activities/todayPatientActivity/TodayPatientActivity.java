@@ -224,6 +224,7 @@ public class TodayPatientActivity extends AppCompatActivity {
         if (cursor != null) {
             if (cursor.moveToFirst()) {
                 do {
+                    boolean hasPrescription = getHasPrescription(cursor);
                     try {
                         TodayPatientModel model = new TodayPatientModel(
                                 cursor.getString(cursor.getColumnIndexOrThrow("uuid")),
@@ -236,7 +237,8 @@ public class TodayPatientActivity extends AppCompatActivity {
                                 cursor.getString(cursor.getColumnIndexOrThrow("last_name")),
                                 cursor.getString(cursor.getColumnIndexOrThrow("date_of_birth")),
                                 StringUtils.mobileNumberEmpty(phoneNumber(cursor.getString(cursor.getColumnIndexOrThrow("patientuuid")))),
-                                cursor.getString(cursor.getColumnIndexOrThrow("sync")));
+                                cursor.getString(cursor.getColumnIndexOrThrow("sync")),
+                                hasPrescription);
                         model.setGender(cursor.getString(cursor.getColumnIndexOrThrow("gender")));
                         todayPatientList.add(model
                         );
@@ -337,10 +339,10 @@ public class TodayPatientActivity extends AppCompatActivity {
                             String.format("%s %s", todayPatientModel.getFirst_name(), todayPatientModel.getLast_name()),
                             ""
                     );
-//                    AppointmentDAO appointmentDAO = new AppointmentDAO();
+                    AppointmentDAO appointmentDAO = new AppointmentDAO();
                     //AppointmentInfo appointmentInfo=appointmentDAO.getAppointmentByVisitId(visitUuid);
                     //if(appointmentInfo!=null && appointmentInfo.getStatus().equalsIgnoreCase("booked")) {
-//                    appointmentDAO.deleteAppointmentByVisitId(visitUuid);
+                    appointmentDAO.deleteAppointmentByVisitId(visitUuid);
 
                 }
             });
@@ -466,6 +468,7 @@ public class TodayPatientActivity extends AppCompatActivity {
         if (cursor != null) {
             if (cursor.moveToFirst()) {
                 do {
+                    boolean hasPrescription = getHasPrescription(cursor);
                     try {
                         TodayPatientModel model = new TodayPatientModel(
                                 cursor.getString(cursor.getColumnIndexOrThrow("uuid")),
@@ -478,7 +481,8 @@ public class TodayPatientActivity extends AppCompatActivity {
                                 cursor.getString(cursor.getColumnIndexOrThrow("last_name")),
                                 cursor.getString(cursor.getColumnIndexOrThrow("date_of_birth")),
                                 StringUtils.mobileNumberEmpty(phoneNumber(cursor.getString(cursor.getColumnIndexOrThrow("patientuuid")))),
-                                cursor.getString(cursor.getColumnIndexOrThrow("sync")));
+                                cursor.getString(cursor.getColumnIndexOrThrow("sync")),
+                                hasPrescription);
                         model.setGender(cursor.getString(cursor.getColumnIndexOrThrow("gender")));
                         todayPatientList.add(model
                         );
@@ -584,6 +588,18 @@ public class TodayPatientActivity extends AppCompatActivity {
         idCursor.close();
 
         return phone;
+    }
+
+    private boolean getHasPrescription(Cursor cursor) {
+        boolean hasPrescription = false;
+        String query = "SELECT COUNT(*) FROM tbl_encounter WHERE encounter_type_uuid = 'bd1fbfaa-f5fb-4ebd-b75c-564506fc309e' AND visituuid = ?";
+        Cursor countCursor = db.rawQuery(query, new String[]{cursor.getString(cursor.getColumnIndexOrThrow("uuid"))});
+        countCursor.moveToFirst();
+        int count = countCursor.getInt(0);
+        countCursor.close();
+        if (count == 1)
+            hasPrescription = true;
+        return hasPrescription;
     }
 }
 

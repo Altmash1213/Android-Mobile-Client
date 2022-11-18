@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white">
@@ -14,28 +14,28 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-    <ImageView
-        android:id="@+id/ayu_logo"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:src="@drawable/ic_ayu_logo_svg"
-        android:layout_marginTop="120dp"
-        android:layout_centerHorizontal="true"/>
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ayu_logo"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="120dp"
+                app:srcCompat="@drawable/ic_ayu_logo_svg" />
 
-    <TextView
-        android:id="@+id/tv_intro_two"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/hello_n_n_i_m_ayu_a_digital_health_assistant_let_s_get_started_normal_Screen"
-        android:layout_below="@id/ayu_logo"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="45dp"
-        android:fontFamily="@font/lato_regular"
-        android:textSize="18sp"
-        android:layout_marginStart="44dp"
-        android:layout_marginEnd="44dp"
-        android:lineSpacingExtra="2sp"
-        android:gravity="center_horizontal|top" />
+            <TextView
+                android:id="@+id/tv_intro_two"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/ayu_logo"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="44dp"
+                android:layout_marginTop="45dp"
+                android:layout_marginEnd="44dp"
+                android:fontFamily="@font/lato_regular"
+                android:gravity="center_horizontal|top"
+                android:lineSpacingExtra="2sp"
+                android:text="@string/hello_n_n_i_m_ayu_a_digital_health_assistant_let_s_get_started_normal_Screen"
+                android:textSize="18sp" />
 
         <Button
             android:id="@+id/button_demo_visit"

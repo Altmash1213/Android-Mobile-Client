@@ -1,5 +1,8 @@
 <resources>
 
+    <string-array name="select">
+        <item>Select</item>
+    </string-array>
 
     <string-array name="language_names">
         <item>हिंदी</item>
@@ -162,7 +165,7 @@
         <item>উচ্চতৰ মাধ্যমিক</item>
         <item>স্নাতক আৰু উচ্চতৰ</item>
     </string-array>
- <string-array name="education_ml">
+    <string-array name="education_ml">
         <item>വിദ്യാഭ്യാസം തിരഞ്ഞെടുക്കുക</item>
         <item>നിരക്ഷരൻ</item>
         <item>പ്രാഥമിക</item>
@@ -284,7 +287,7 @@
         <item>എസ്.ടി</item>
         <item>മറ്റുള്ളവർ</item>
     </string-array>
- <string-array name="caste_kn">
+    <string-array name="caste_kn">
         <item>ಆಯ್ಕೆಮಾಡಿ</item>
         <item>ಸಾಮಾನ್ಯ</item>
         <item>ಓ.ಬಿ.ಸಿ.</item>
@@ -361,12 +364,13 @@
         <item>എ.പി.എൽ</item>
         <item>ബിപിഎൽ</item>
     </string-array>
-<string-array name="economic_kn">
+    <string-array name="economic_kn">
         <item>ಆಯ್ಕೆಮಾಡಿ</item>
         <item>ಬಡತನ ರೇಖೆಯ ಮೇಲೆ</item>
         <item>ಬಡತನ ರೇಖೆಯ ಕೆಳಗೆ</item>
 
-    </string-array><string-array name="economic_ru">
+    </string-array>
+    <string-array name="economic_ru">
         <item>Выбирать</item>
         <item>APL</item>
         <item>BPL</item>
@@ -1613,5 +1617,740 @@
         <item>Другое заболевание твердых тканей зубов</item>
         <item>Заражение зубов или десен</item>
     </string-array>
+
+    <!--Roster-->
+
+
+    <string-array name="relationshipHoH_en">
+        <item>Select</item>
+        <item>Self</item>
+        <item>Spouse</item>
+        <item>Son/daughter</item>
+        <item>Son/daughter in law</item>
+        <item>Grandchild</item>
+        <item>Father/mother</item>
+        <item>Father/mother-in-law</item>
+        <item>Brother/sister</item>
+        <item>Brother/sister-in-law</item>
+        <item>Niece/nephew</item>
+        <item>Grandparent/grand parent-in-law</item>
+        <item>Other relative</item>
+        <item>Adopted/foster/stepchild</item>
+        <item>Domestic servant</item>
+        <item>Other not related</item>
+        <item>Other (specify)</item>
+        <item>Not stated</item>
+    </string-array>
+
+    <string-array name="relationshipHoH_Self_en">
+        <item>Select</item>
+        <item>Spouse</item>
+        <item>Son/daughter</item>
+        <item>Son/daughter in law</item>
+        <item>Grandchild</item>
+        <item>Father/mother</item>
+        <item>Father/mother-in-law</item>
+        <item>Brother/sister</item>
+        <item>Brother/sister-in-law</item>
+        <item>Niece/nephew</item>
+        <item>Grandparent/grand parent-in-law</item>
+        <item>Other relative</item>
+        <item>Adopted/foster/stepchild</item>
+        <item>Domestic servant</item>
+        <item>Other not related</item>
+        <item>Other (specify)</item>
+        <item>Not stated</item>
+    </string-array>
+
+    <string-array name="relationshipHoH_Self_mr">
+        <item>निवडा</item>
+        <item>पती/पत्नी</item>
+        <item>मुलगा/मुलगी</item>
+        <item>मुलगा/सून</item>
+        <item>नातवंड</item>
+        <item>वडील/आई</item>
+        <item>वडील/सासू-सासरे</item>
+        <item>भाऊ/बहिण</item>
+        <item>भाऊ/बहिण-सासरे</item>
+        <item>भाची/भाचा</item>
+        <item>आजोबा/आजोबा-सासरे</item>
+        <item>इतर नातेवाईक</item>
+        <item>दत्तक/पालक/स्टेपचाइल्ड</item>
+        <item>घरगुती सेवक</item>
+        <item>इतर संबंधित नाही</item>
+        <item>इतर (स्पष्ट करा)</item>
+        <item>सांगित नाही</item>
+    </string-array>
+
+
+    <string-array name="bp_en">
+        <item>Select</item>
+        <item>Never Checked</item>
+        <item>In past one week</item>
+        <item>Within last month</item>
+        <item>Between 1 month to 3 months ago</item>
+        <item>Between 3 months - 6 months ago</item>
+        <item>More than 6 months</item>
+    </string-array>
+
+    <string-array name="hb_en">
+        <item>Select</item>
+        <item>Never Checked</item>
+        <item>In past one week</item>
+        <item>Within last month</item>
+        <item>Between 1 month to 3 months ago</item>
+        <item>Between 3 months-6months ago</item>
+        <item>More than 6 months</item>
+    </string-array>
+
+    <string-array name="bmi_en">
+        <item>Select</item>
+        <item>Never Checked</item>
+        <item>In past one week</item>
+        <item>Within last month</item>
+        <item>Between 1 month to 3 months ago</item>
+        <item>Between 3 months-6months ago</item>
+        <item>More than 6 months</item>
+    </string-array>
+
+    <string-array name="healthissuereported_en">
+        <item>Select</item>
+        <item>Fever</item>
+        <item>Cough/ Cold</item>
+        <item>Diarrhoea</item>
+        <item>Injury</item>
+        <item>Skin Issues</item>
+        <item>Eye /Vision issues</item>
+        <item>Joint/Bone pain</item>
+        <item>Others (Specify)</item>
+    </string-array>
+
+
+    <string-array name="primaryhealthprovider_en">
+        <item>Select</item>
+        <item>Government doctor</item>
+        <item>Private doctor</item>
+        <item>Staff nurse</item>
+        <item>ANM</item>
+        <item>Asha</item>
+        <item>AWW</item>
+        <item>RMP</item>
+        <item>Ayush doctor</item>
+        <item>Homeopath doctor</item>
+        <item>Traditional healer/quack</item>
+        <item>Did not consult any health provider for this issue</item>
+        <item>Other (specify)</item>
+    </string-array>
+
+    <string-array name="primaryhealthprovider_mr">
+
+        <item>निवडा</item>
+        <item>सरकारी डॉक्टर</item>
+        <item>खाजगी डॉक्टर</item>
+        <item>स्टाफ नर्स</item>
+        <item>ANM</item>
+        <item>आशा</item>
+        <item>AWW</item>
+        <item>RMP</item>
+        <item>आयुष डॉक्टर</item>
+        <item>होमिओपॅथ डॉक्टर</item>
+        <item>पारंपारिक उपचार करणारा/क्वॅक</item>
+        <item>या समस्येसाठी कोणत्याही आरोग्य प्रदात्याचा सल्ला घेतला नाही</item>
+        <item>इतर (स्पष्ट करा)</item>
+    </string-array>
+
+    <string-array name="firstlocation_en">
+        <item>Select</item>
+        <item>Home</item>
+        <item>Private clinic</item>
+        <item>PHC</item>
+        <item>CHC</item>
+        <item>DH</item>
+        <item>Private hospital</item>
+        <item>Ayush center</item>
+        <item>Pharmacy</item>
+        <item>Others (please specify)</item>
+    </string-array>
+
+    <string-array name="firstlocation_mr">
+        <item>निवडा</item>
+        <item>घर</item>
+        <item>खाजगी दवाखाना</item>
+        <item>प्राथमिक आरोग्य केंद्र</item>
+        <item>सामुदायिक आरोग्य केंद्र</item>
+        <item>जिल्हा रुग्णालय</item>
+        <item>खाजगी रुग्णालय</item>
+        <item>आयुष केंद्र</item>
+        <item>फार्मसी</item>
+        <item>इतर (कृपया स्पष्ट करा)</item>
+    </string-array>
+
+
+    <string-array name="referredto_en">
+        <item>Select</item>
+        <item>Not referred</item>
+        <item>Private clinic</item>
+        <item>Phc</item>
+        <item>Chc</item>
+        <item>Dh</item>
+        <item>Private hospital</item>
+        <item>Ayush center</item>
+        <item>Others (please specify)</item>
+    </string-array>
+
+
+    <string-array name="referredto_mr">
+        <item>निवडा</item>
+        <item>संदर्भित नाही</item>
+        <item>खाजगी क्लिनिक</item>
+        <item>प्राथमिक आरोग्य केंद्र</item>
+        <item>सामुदायिक आरोग्य केंद्र</item>
+        <item>जिल्हा रुग्णालय</item>
+        <item>खाजगी रुग्णालय</item>
+        <item>आयुष केंद्र</item>
+        <item>इतर (कृपया स्पष्ट करा)</item>
+    </string-array>
+
+
+    <string-array name="modetransport_en">
+        <item>Select</item>
+        <item>Walking</item>
+        <item>Bus</item>
+        <item>Private taxi</item>
+        <item>Shuttle taxi</item>
+        <item>Auto</item>
+        <item>Own vehicle</item>
+        <item>Friends/neighbours vehicle</item>
+        <item>Ambulance</item>
+        <item>Others (specify)</item>
+    </string-array>
+    <string-array name="modetransport_mr">
+        <item>निवडा</item>
+        <item>चालणे</item>
+        <item>बस</item>
+        <item>खाजगी टॅक्सी</item>
+        <item>शटल टॅक्सी</item>
+        <item>ऑटो</item>
+        <item>स्वतःचे वाहन</item>
+        <item>मित्रांचे/शेजाऱ्यांचे वाहन</item>
+        <item>अॅम्ब्युलन्स</item>
+        <item>इतर (स्पष्ट करा)</item>
+    </string-array>
+
+    <string-array name="scoreexperience_en">
+        <item>Select</item>
+        <item>Dissatisfied</item>
+        <item>Below Average</item>
+        <item>Average</item>
+        <item>Good</item>
+        <item>Very Good</item>
+    </string-array>
+
+    <string-array name="scoreexperience_mr">
+        <item>निवडा</item>
+        <item>असंतुष्ट</item>
+        <item>सरासरीच्या खाली</item>
+        <item>सरासरी</item>
+        <item>चांगले</item>
+        <item>खूप छान</item>
+    </string-array>
+
+    <string-array name="pasttwoyrs_en">
+        <item>Select</item>
+        <item>Yes</item>
+        <item>No</item>
+    </string-array>
+    <string-array name="pasttwoyrs_mr">
+        <item>निवडा</item>
+        <item>होय</item>
+        <item>नाही</item>
+    </string-array>
+    <string-array name="outcomepregnancy_en">
+        <item>Select</item>
+        <item>Born alive</item>
+        <item>Still birth</item>
+        <item>Induced abortion (mtp)</item>
+        <item>Miscarriage</item>
+        <item>Currently pregnant</item>
+    </string-array>
+
+    <string-array name="childalive_en">
+        <item>Select</item>
+        <item>Yes</item>
+        <item>No</item>
+    </string-array>
+
+    <string-array name="householdHeadReligion_en">
+        <item>@string/select</item>
+        <item>@string/religion_hindu</item>
+        <item>@string/religion_muslim</item>
+        <item>@string/religion_christian</item>
+        <item>@string/religion_sikh</item>
+        <item>@string/religion_buddhist_neo_buddhist</item>
+        <item>@string/religion_other</item>
+        <item>@string/religion_no_religion</item>
+    </string-array>
+    <string-array name="householdHeadReligion_mr">
+        <item>@string/select</item>
+        <item>@string/religion_hindu</item>
+        <item>@string/religion_muslim</item>
+        <item>@string/religion_christian</item>
+        <item>@string/religion_sikh</item>
+        <item>@string/religion_buddhist_neo_buddhist</item>
+        <item>@string/religion_other</item>
+        <item>@string/religion_no_religion</item>
+    </string-array>
+    <string-array name="outcomepregnancy_mr">
+        <item>निवडा</item>
+        <item>जिवंत जन्मलेला</item>
+        <item>बाळ मृतावस्थेत जन्मले</item>
+        <item>ऐच्छिक गर्भपात/ गर्भधारणेची वैद्यकीय समाप्ती (MTP)</item>
+        <item>गर्भपात</item>
+        <item>सध्या गरोदर आहे</item>
+    </string-array>
+
+    <string-array name="householdHeadCaste_en">
+        <item>@string/select</item>
+        <item>@string/caste_schedule_caste</item>
+        <item>@string/caste_schedule_tribe</item>
+        <item>@string/caste_other_backward_caste</item>
+        <item>@string/caste_VJNT</item>
+        <item>@string/caste_general</item>
+        <item>@string/caste_dont_know</item>
+        <item>@string/caste_refused_to_answer</item>
+
+    </string-array>
+
+
+    <string-array name="householdHeadCaste_mr">
+        <item>@string/select</item>
+        <item>@string/caste_schedule_caste</item>
+        <item>@string/caste_schedule_tribe</item>
+        <item>@string/caste_other_backward_caste</item>
+
+        <item>@string/caste_VJNT</item>
+        <item>@string/caste_general</item>
+        <item>@string/caste_dont_know</item>
+        <item>@string/caste_refused_to_answer</item>
+
+    </string-array>
+
+    <string-array name="nas_district">
+        <item>@string/district_nashik</item>
+    </string-array>
+
+    <!--    <string-array name="occupation_">-->
+    <!--        <item>@string/select</item>-->
+    <!--        <item>@string/sale_of_cereal_production</item>-->
+    <!--        <item>@string/sale_of_animals_or_animal_products</item>-->
+    <!--        <item>@string/agricultural_wage_labor_employed_for_farm_work</item>-->
+    <!--        <item>@string/salaried_worker_fixed_monthly_salary</item>-->
+    <!--        <item>@string/self_employed_non_agricultural_petty_business</item>-->
+    <!--        <item>@string/daily_labor_unskilled_work_agricultural_non_agricultural</item>-->
+    <!--        <item>@string/nrega</item>-->
+    <!--        <item>@string/seasonal_labor</item>-->
+    <!--        <item>@string/no_paid_work</item>-->
+    <!--        <item>@string/pension</item>-->
+    <!--        <item>@string/remittances_checkbox</item>-->
+    <!--        <item>@string/other_please_specify</item>-->
+    <!--    </string-array>-->
+    <!--    <string-array name="occupation_mr">-->
+    <!--        <item>निवडा</item>-->
+    <!--        <item>अन्नधान्य उत्पादन (गहू, मका, बार्ली), कॅश पिके (कापूस, ऊस, जूट), किंवा भाज्या आणि फळे विक्री</item>-->
+    <!--        <item>प्राणी / प्राणी उत्पादने विक्री</item>-->
+    <!--        <item>कृषि वेतन श्रम (शेतीच्या कामासाठी कार्यरत)</item>-->
+    <!--        <item>पगारदार कर्मचारी (निश्चित मासिक वेतन) - सरकार, खाजगी, इ.</item>-->
+    <!--        <item>स्वयंरोजगार (गैर-शेती / लहान व्यवसाय)</item>-->
+    <!--        <item>दैनिक श्रम (अकुशल काम- शेती / गैर-कृषी)</item>-->
+    <!--        <item>nrega.</item>-->
+    <!--        <item>हंगामी श्रम</item>-->
+    <!--        <item>पैसे दिले नाहीत</item>-->
+    <!--        <item>पेंशन</item>-->
+    <!--        <item>प्रेषण</item>-->
+    <!--        <item>इतर (कृपया निर्दिष्ट करा)</item>-->
+    <!--        <item>उत्पन्नाचे इतर स्त्रोत</item>-->
+
+    <!--    </string-array>-->
+    <!--    <string-array name="occupation_en">-->
+    <!--        <item>Select</item>-->
+    <!--        <item>Sale of cereal production (wheat, maize, barley), cash crops (cotton, sugarcane, jute), or vegetables and fruits</item>-->
+    <!--        <item>Sale of animals/animal products</item>-->
+    <!--        <item>Agricultural wage labor (employed for farm work)</item>-->
+    <!--        <item>Salaried worker (fixed monthly salary) - Government, private, etc.</item>-->
+    <!--        <item>Self-employed (non-agriculture/petty business)</item>-->
+    <!--        <item>Daily labor (unskilled work - Agricultural/non-Agricultural)</item>-->
+    <!--        <item>NREGA</item>-->
+    <!--        <item>Seasonal Labor</item>-->
+    <!--        <item>No paid work</item>-->
+    <!--        <item>Pension</item>-->
+    <!--        <item>Remittances</item>-->
+    <!--        <item>Other (please specify)</item>-->
+    <!--        <item>Other sources of income</item>-->
+    <!--    </string-array>-->
+
+    <string-array name="occupation_identification_en">
+        <item>Select</item>
+        <item>Salaried Government Job</item>
+        <item>Salaried Private Job</item>
+        <item>Petty Business or Shop Owner</item>
+        <item>Technician or Craftsman/Other Skilled Work (Driver, Mason etc)</item>
+        <item>Agricultural Farmer</item>
+        <item>Tenant Farmer or Agricultural Daily Wage Worker</item>
+        <item>Daily Wage Worker (Unskilled Work)</item>
+        <item>Household Work</item>
+        <item>Student</item>
+        <item>Unemployed</item>
+        <item>Retired (With Pension)</item>
+        <item>Retired (Without Pension)</item>
+        <item>Others (Specify)</item>
+    </string-array>
+
+    <string-array name="occupation_identification_mr">
+        <item>निवडा</item>
+        <item>पगारदार सरकारी नोकरी</item>
+        <item>पगारदार खाजगी नोकरी</item>
+        <item>लहान व्यवसाय / दुकान मालक</item>
+        <item>तंत्रज्ञान / कारागीर / इतर कुशल काम (चालक, मेसन इ.)</item>
+        <item>कृषी शेतकरी</item>
+        <item>भाडेकरी शेतकरी / कृषी दैनिक वेतन कार्यकर्ता</item>
+        <item>दैनिक वेतन कर्मचारी (अकुशल काम)</item>
+        <item>घरगुती काम</item>
+        <item>विद्यार्थी</item>
+        <item>बेरोजगार</item>
+        <item>सेवानिवृत्त (पेंशनसह)</item>
+        <item>सेवानिवृत्त (पेंशनशिवाय)</item>
+        <item>इतर (स्पष्ट)</item>
+    </string-array>
+
+    <string-array name="relationshipHoH_mr">
+        <item>निवडा</item>
+        <item>स्वत:</item>
+        <item>पती/पत्नी</item>
+        <item>मुलगा/मुलगी</item>
+        <item>मुलगा/सून</item>
+        <item>नातवंड</item>
+        <item>वडील/आई</item>
+        <item>वडील/सासू-सासरे</item>
+        <item>भाऊ/बहिण</item>
+        <item>भाऊ/बहिण-सासरे</item>
+        <item>भाची/भाचा</item>
+        <item>आजोबा/आजोबा-सासरे</item>
+        <item>इतर नातेवाईक</item>
+        <item>दत्तक/पालक/स्टेपचाइल्ड</item>
+        <item>घरगुती सेवक</item>
+        <item>इतर संबंधित नाही</item>
+        <item>इतर (स्पष्ट करा)</item>
+        <item>सांगित नाही</item>
+    </string-array>
+
+    <string-array name="maritual_en">
+        <item>Select</item>
+        <item>Currently married</item>
+        <item>Widowed</item>
+        <item>Divorced</item>
+        <item>Separated</item>
+        <item>Deserted</item>
+        <item>Never married</item>
+    </string-array>
+    <string-array name="maritual_mr">
+        <item>निवडा</item>
+        <item>सध्या विवाहित</item>
+        <item>विधवा/ विधुर</item>
+        <item>घटस्फोटित</item>
+        <item>विभक्त</item>
+        <item>सोडून दिलेले</item>
+        <item>कधीही लग्न केलेले नाही</item>
+    </string-array>
+
+    <string-array name="phoneownership_en">
+        <item>Select</item>
+        <item>None</item>
+        <item>Shared</item>
+        <item>Owns smartphone</item>
+        <item>Owns feature phone</item>
+    </string-array>
+
+
+    <string-array name="phoneownership_mr">
+        <item>निवडा</item>
+        <item>काहीही नाही</item>
+        <item>मिळून वापरला जातो</item>
+        <item>स्मार्टफोनचा मालक आहे</item>
+        <item>साधा फोन</item>
+    </string-array>
+
+
+    <string-array name="bp_mr">
+        <item>निवडा</item>
+        <item>कधीही तपासले नाही</item>
+        <item>गेल्या एका आठवड्यात</item>
+        <item>गेल्या महिन्याच्या आत</item>
+        <item>एक महिना ते 3 महिन्यांपूर्वी</item>
+        <item>3 महिने-6 महिन्यांपूर्वी</item>
+        <item>6 महिन्यांपेक्षा जास्त</item>
+
+    </string-array>
+    <string-array name="sugar_en">
+        <item>Select</item>
+        <item>Never Checked</item>
+        <item>In past one week</item>
+        <item>Within last month</item>
+        <item>Between 1 month to 3 months ago</item>
+        <item>Between 3 months - 6 months ago</item>
+        <item>More than 6 months</item>
+    </string-array>
+    <string-array name="sugar_mr">
+        <item>निवडा</item>
+        <item>कधीही तपासले नाही</item>
+        <item>गेल्या एका आठवड्यात</item>
+        <item>गेल्या महिन्याच्या आत</item>
+        <item>एक महिना ते 3 महिन्यांपूर्वी</item>
+        <item>3 महिने-6 महिन्यांपूर्वी</item>
+        <item>6 महिन्यांपेक्षा जास्त</item>
+    </string-array>
+
+
+    <string-array name="hb_mr">
+        <item>निवडा</item>
+        <item>कधीही तपासले नाही</item>
+        <item>गेल्या एका आठवड्यात</item>
+        <item>गेल्या महिन्याच्या आत</item>
+        <item>एक महिना ते 3 महिन्यांपूर्वी</item>
+        <item>3 महिने-6 महिन्यांपूर्वी</item>
+        <item>6 महिन्यांपेक्षा जास्त</item>
+    </string-array>
+
+
+    <string-array name="bmi_mr">
+        <item>निवडा</item>
+        <item>कधीही तपासले नाही</item>
+        <item>गेल्या एका आठवड्यात</item>
+        <item>गेल्या महिन्याच्या आत</item>
+        <item>एक महिना ते 3 महिन्यांपूर्वी</item>
+        <item>3 महिने-6 महिन्यांपूर्वी</item>
+        <item>6 महिन्यांपेक्षा जास्त</item>
+    </string-array>
+
+
+    <string-array name="healthissuereported_mr">
+        <item>निवडा</item>
+        <item>ताप</item>
+        <item>खोकला/सर्दी</item>
+        <item>अतिसार</item>
+        <item>इजा</item>
+        <item>त्वचेच्या समस्या</item>
+        <item>डोळा /दृष्टी समस्या</item>
+        <item>सांधे/हाडांचे दुखणे</item>
+        <item>इतर (स्पष्ट करा)</item>
+    </string-array>
+
+
+    <string-array name="childalive_mr">
+        <item>निवडा</item>
+        <item>होय</item>
+        <item>नाही</item>
+    </string-array>
+
+    <string-array name="placedelivery_en">
+        <item>Select</item>
+        <item>Home</item>
+        <item>Sub center</item>
+        <item>Chc/ civil hospital at block level</item>
+        <item>District hospital / civil hospital at district level</item>
+        <item>Private clinic</item>
+        <item>Private hospital</item>
+    </string-array>
+
+    <string-array name="placedelivery_mr">
+        <item>निवडा</item>
+        <item>घर</item>
+        <item>उपकेंद्र</item>
+        <item>सीएचसी/ ब्लॉक लेव्हलवर सिव्हिल हॉस्पिटल</item>
+        <item>जिल्हा स्तरावर जिल्हा रुग्णालय/ नागरी रुग्णालय</item>
+        <item>खाजगी क्लिनिक</item>
+        <item>खाजगी रुग्णालय</item>
+    </string-array>
+
+
+    <string-array name="sexofbaby_en">
+        <item>Select</item>
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
+
+    <string-array name="sexofbaby_mr">
+        <item>निवडा</item>
+        <item>मुलगा</item>
+        <item>मुलगी</item>
+    </string-array>
+
+
+    <string-array name="pregnancyplanned_en">
+        <item>Select</item>
+        <item>Yes</item>
+        <item>No</item>
+    </string-array>
+
+    <string-array name="pregnancyplanned_mr">
+        <item>निवडा</item>
+        <item>होय</item>
+        <item>नाही</item>
+    </string-array>
+
+    <string-array name="highriskpregnancy_en">
+        <item>Select</item>
+        <item>Yes</item>
+        <item>No</item>
+    </string-array>
+
+    <string-array name="highriskpregnancy_mr">
+        <item>निवडा</item>
+        <item>होय</item>
+        <item>नाही</item>
+    </string-array>
+    <string-array name="complications_en">
+        <item>Select</item>
+        <item>Yes</item>
+        <item>No</item>
+    </string-array>
+
+    <string-array name="complications_mr">
+        <item>निवडा</item>
+        <item>होय</item>
+        <item>नाही</item>
+    </string-array>
+    <string-array name="singlemultiplebirths_en">
+        <item>Select</item>
+        <item>Single</item>
+        <item>Multiple</item>
+    </string-array>
+
+    <string-array name="singlemultiplebirths_mr">
+        <item>निवडा</item>
+        <item>एकच मुल</item>
+        <item>एकाहून अधिक जन्म (जुळे, तिळे, इ.)</item>
+    </string-array>
+
+    <string-array name="block_en">
+        <item>Select Block</item>
+        <item>Peth Block</item>
+        <item>Suragana Block</item>
+        <item>Other Block</item>
+    </string-array>
+    <string-array name="block_mr">
+        <item>ब्लॉक निवडा</item>
+        <item>पेठ तालुका</item>
+        <item>सुरगाणा तालुका</item>
+        <item>इतर तालुका</item>
+    </string-array>
+
+    <string-array name="peth_block_village_mr">
+        <item>@string/select</item>
+        <item>@string/surgane</item>
+        <item>@string/sadadapada</item>
+        <item>@string/bhatavihir</item>
+        <item>@string/borada</item>
+        <item>@string/ghubadasaka</item>
+        <item>@string/sheharipada</item>
+        <item>@string/mohalipada</item>
+        <item>@string/tungarapada</item>
+        <item>@string/hedapada</item>
+        <item>@string/kapurane</item>
+        <item>@string/ghotapada</item>
+        <item>@string/vadapada</item>
+        <item>@string/dabhadi</item>
+        <item>@string/gandole</item>
+        <item>@string/chaukada</item>
+        <item>@string/holamari</item>
+        <item>@string/badagi</item>
+        <item>@string/palashi</item>
+        <item>@string/jamale</item>
+        <item>@string/derapada</item>
+        <item>@string/golasapada</item>
+        <item>@string/chikhali</item>
+    </string-array>
+    <string-array name="peth_block_village_en">
+        <item>Select</item>
+        <item>Surgane</item>
+        <item>Sadadapada</item>
+        <item>Bhatavihir</item>
+        <item>Borada</item>
+        <item>Ghubadasaka</item>
+        <item>Sheharipada</item>
+        <item>Mohalipada</item>
+        <item>Tungarapada</item>
+        <item>Hedapada</item>
+        <item>Kapurane</item>
+        <item>Ghotapada</item>
+        <item>Vadapada</item>
+        <item>Dabhadi</item>
+        <item>Gandole</item>
+        <item>Chaukada</item>
+        <item>Holamari</item>
+        <item>Badagi</item>
+        <item>Palashi</item>
+        <item>Jamale</item>
+        <item>Derapada</item>
+        <item>Golasapada</item>
+        <item>Chikhali</item>
+    </string-array>
+    <string-array name="suragana_block_villages_mr">
+        <item>निवडा</item>
+        <item>मोधळपाडा</item>
+        <item>खिरमाणे</item>
+        <item>कळमणे</item>
+        <item>भेगु-सावरपाडा</item>
+        <item>कोटमबी</item>
+        <item>जामभुळपाडा</item>
+        <item>आंबूपाडा</item>
+        <item>बेडसे</item>
+    </string-array>
+
+    <string-array name="suragana_block_villages_en">
+        <item>Select Village</item>
+        <item>Modhalapada</item>
+        <item>Khiramane</item>
+        <item>Kalamane</item>
+        <item>Bhegu-Savarapada</item>
+        <item>Kotambi</item>
+        <item>Jambhulapada</item>
+        <item>Ambupada</item>
+        <item>Bedase</item>
+    </string-array>
+
+    <string-array name="child_pre_term_en">
+        <item>@string/select</item>
+        <item>@string/yes</item>
+        <item>@string/no</item>
+    </string-array>
+
+    <string-array name="child_pre_term_mr">
+        <item>@string/select</item>
+        <item>@string/yes</item>
+        <item>@string/no</item>
+    </string-array>
+
+    <string-array name="delivery_type_en">
+        <item>@string/select</item>
+        <item>@string/normal_vaginal_delivery</item>
+        <item>@string/cesarean_section_c_section</item>
+    </string-array>
+
+    <string-array name="delivery_type_mr">
+        <item>@string/select</item>
+        <item>@string/normal_vaginal_delivery</item>
+        <item>@string/cesarean_section_c_section</item>
+    </string-array>
+
+    <!-- Thermal Printer -->
+<!--
+    <string-array name="font_type_esc">
+        <item>@string/spin_default_esc_font</item>
+        <item>Font-A</item>
+        <item>Font-B</item>
+        <item>Font-C</item>
+        <item>Font-D</item>
+    </string-array>
+-->
 
 </resources>

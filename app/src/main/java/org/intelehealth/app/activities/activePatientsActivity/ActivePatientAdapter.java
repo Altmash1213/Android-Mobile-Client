@@ -99,7 +99,7 @@ public class ActivePatientAdapter extends RecyclerView.Adapter<ActivePatientAdap
         String age = DateAndTimeUtils.getAgeInYears(activePatientModel.getDate_of_birth(), context);
         String dob = DateAndTimeUtils.SimpleDatetoLongDate(activePatientModel.getDate_of_birth());
 //        String body = String.format("%s %s (%s)", context.getString(R.string.identification_screen_prompt_age), age, activePatientModel.getGender());
-        Spanned body = Html.fromHtml(context.getString(R.string.identification_screen_prompt_age) + " <b>" + age + " ("+ StringUtils.getLocaleGender(context, activePatientModel.getGender()) + ")</b>");
+        Spanned body = Html.fromHtml(context.getString(R.string.identification_screen_prompt_age) + " <b>" + age + " (" + StringUtils.getLocaleGender(context, activePatientModel.getGender()) + ")</b>");
 
         holder.getHeadTextView().setText(String.format("%s %s", activePatientModel.getFirst_name(), activePatientModel.getLast_name()));
         holder.getBodyTextView().setText(activePatientModel.getOpenmrs_id());
@@ -126,14 +126,16 @@ public class ActivePatientAdapter extends RecyclerView.Adapter<ActivePatientAdap
                 Cursor idCursor = db.query("tbl_patient", patientColumns, patientSelection, patientArgs, null, null, null);
                 String visit_id = "";
 
-                String end_date="",dob = "", mGender = "", patientName = "";
+                String end_date = "", dob = "", mGender = "", patientName = "", patientLName = "", patientFName = "";
                 float float_ageYear_Month = 0;
                 if (idCursor.moveToFirst()) {
                     do {
                         mGender = idCursor.getString(idCursor.getColumnIndexOrThrow("gender"));
                         patientName = idCursor.getString(idCursor.getColumnIndexOrThrow("first_name")) + " " +
                                 idCursor.getString(idCursor.getColumnIndexOrThrow("last_name"));
-                        dob=idCursor.getString((idCursor.getColumnIndexOrThrow("date_of_birth")));
+                        patientFName = idCursor.getString(idCursor.getColumnIndexOrThrow("first_name"));
+                        patientLName = idCursor.getString(idCursor.getColumnIndexOrThrow("last_name"));
+                        dob = idCursor.getString((idCursor.getColumnIndexOrThrow("date_of_birth")));
                     } while (idCursor.moveToNext());
                 }
                 idCursor.close();
@@ -147,12 +149,8 @@ public class ActivePatientAdapter extends RecyclerView.Adapter<ActivePatientAdap
                 if (visitCursor.getCount() >= 1) {
                     if (visitCursor.moveToLast() && visitCursor != null) {
                         do {
-                            if(visitCursor.getString(visitCursor.getColumnIndexOrThrow("uuid")).equalsIgnoreCase(""+activePatientModel.getUuid())){
-                                end_date = visitCursor.getString(visitCursor.getColumnIndexOrThrow("enddate"));
-                                visit_id = visitCursor.getString(visitCursor.getColumnIndexOrThrow("uuid"));}
-                            else{
-
-                            }
+                            end_date = visitCursor.getString(visitCursor.getColumnIndexOrThrow("enddate"));
+                            visit_id = visitCursor.getString(visitCursor.getColumnIndexOrThrow("uuid"));
                         } while (visitCursor.moveToPrevious());
                     }
                 }
@@ -185,7 +183,7 @@ public class ActivePatientAdapter extends RecyclerView.Adapter<ActivePatientAdap
                     past_visit = true;
                 }
 
-                float_ageYear_Month=DateAndTimeUtils.getFloat_Age_Year_Month(dob);
+                float_ageYear_Month = DateAndTimeUtils.getFloat_Age_Year_Month(dob);
 
                 visitSummary.putExtra("visitUuid", visit_id);
                 visitSummary.putExtra("patientUuid", patientUuid);
@@ -193,6 +191,8 @@ public class ActivePatientAdapter extends RecyclerView.Adapter<ActivePatientAdap
                 visitSummary.putExtra("encounterUuidAdultIntial", encounterlocalAdultintial);
                 visitSummary.putExtra("EncounterAdultInitial_LatestVisit", encounterlocalAdultintial);
                 visitSummary.putExtra("name", patientName);
+                visitSummary.putExtra("patientFirstName", patientFName);
+                visitSummary.putExtra("patientLastName", patientLName);
                 visitSummary.putExtra("gender", mGender);
                 visitSummary.putExtra("float_ageYear_Month", float_ageYear_Month);
                 visitSummary.putExtra("tag", "");
@@ -223,7 +223,7 @@ public class ActivePatientAdapter extends RecyclerView.Adapter<ActivePatientAdap
 
         boolean enableEndVisit = false;
         for (int i = 0; i < listPatientUUID.size(); i++) {
-            if (activePatientModels.get(position).getPatientuuid().equalsIgnoreCase(listPatientUUID.get(i))) {
+            if (activePatientModels.get(position).getHasPrescription()) {
                 holder.ivPriscription.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_prescription_green));
                 holder.ivPriscription.setTag("1");
                 enableEndVisit = true;
