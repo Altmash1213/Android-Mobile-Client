@@ -22,3 +22,6 @@ salt.env
 /webrtc/build/
 /app/release/
 /app/src/main/assets
+/app/src/main/res/layout-small/
+/app/src/main/res/layout/
+/app/src/main/res/layout-land/
