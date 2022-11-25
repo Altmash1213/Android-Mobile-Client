@@ -330,7 +330,7 @@ public class CameraActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if (mCameraView != null) mCameraView.stop();
-        CameraActivityPermissionsDispatcher.startCameraWithCheck(this);
+        CameraActivityPermissionDispatching.startCameraWithCheck(this);
     }
 
     @Override

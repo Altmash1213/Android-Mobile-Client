@@ -13,11 +13,13 @@ import android.os.Bundle;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.text.InputFilter;
 import android.text.Spanned;
@@ -44,6 +46,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.gson.Gson;
 
+import org.intelehealth.app.databinding.ActivityIdentificationBinding;
 import org.joda.time.LocalDate;
 import org.joda.time.Period;
 import org.joda.time.PeriodType;
@@ -205,7 +208,37 @@ public class IdentificationActivity extends AppCompatActivity {
     //random value assigned to check while editing. If user didnt updated the dob and just clicked on fab
     //in that case, the edit() will get the dob_indexValue as 15 and we  will check if the
     //dob_indexValue == 15 then just get the mDOB editText value and add in the db.
+// Roster Questions
+    Spinner spinner_whatisyourrelation, spinner_maritualstatus, spinner_phoneownership, spinner_bpchecked, spinner_sugarchecked, spinner_hbchecked,
+            spinner_bmi, spinner_healthissuereported, spinner_primaryhealthprovider, spinner_firstlocation, spinner_referredto, spinner_modeoftransport,
+            spinner_experiencerscore, spinner_block, spinner_village, spinner_focalPointBlock;
 
+    Spinner spinner_focalPointVillage, spinner_pregnantpasttwoyrs, spinner_outcomepregnancy, spinner_childalive, spinner_placeofdeliverypregnant,
+            spinner_sexofbaby, spinner_pregnancyplanned, spinner_pregnancyhighriskcase, spinner_pregnancycomplications, spinner_singlemultiplebirths;
+
+    ArrayAdapter<CharSequence> adapter_whatisyourrelation, adapter_maritualstatus, adapter_phoneownership, adapter_bpchecked, adapter_sugarchecked, adapter_hbchecked, adapter_bmi, adapter_focalPointBlock, adapter_FocalVillage_Peth, adapter_FocalVillage_Surgana, adapter_block, adapter_healthissuereported, adapter_primaryhealthprovider, adapter_firstlocation, adapter_referredto, adapter_modeoftransport, adapter_experiencerscore;
+
+
+    ArrayAdapter<CharSequence> adapter_pregnantpasttwoyrs, adapter_outcomepregnancy, adapter_childalive, adapter_placeofdeliverypregnant, adapter_sexofbaby, adapter_pregnancyplanned, adapter_pregnancyhighriskcase, adapter_pregnancycomplications, adapter_singlemultiplebirths;
+
+    EditText edittext_noofepisodes, edittext_avgcosttravel, edittext_avgcostconsult, edittext_avgcostmedicines;
+
+    EditText edittext_howmanytimmespregnant, edittext_yearofpregnancy, edittext_monthspregnancylast, edittext_monthsbeingpregnant, edittext_babyagedied;
+
+    TextInputLayout til_whatisyourrelation_other, til_occupation_other;
+    LinearLayout textinputlayout_blockVillageOther;
+    TextInputEditText et_whatisyourrelation_other, et_occupation_other, et_block_other, et_village_other;
+
+    private TextView blockTextView, villageTextView;
+
+    private LinearLayout llPORoaster, ll18;
+    public ViewPager2 viewPager2;
+    private HouseholdSurveyAdapter adapter;
+    private PregnancyOutcomeAdapter pregnancyOutcomeAdapter;
+    private ActivityIdentificationBinding binding;
+    private List<HealthIssues> healthIssuesList = new ArrayList<>();
+    private List<PregnancyRosterData> pregnancyOutcomesList = new ArrayList<>();
+    int noOfClicks = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -224,7 +257,9 @@ public class IdentificationActivity extends AppCompatActivity {
         }
         //  sessionManager.setCurrentLang(getResources().getConfiguration().locale.toString());
 
-        setContentView(R.layout.activity_identification);
+        binding = ActivityIdentificationBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
         setTitle(R.string.title_activity_identification);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -1241,6 +1276,51 @@ public class IdentificationActivity extends AppCompatActivity {
                 onPatientUpdateClicked(patient1);
             } else {
                 onPatientCreateClicked();
+            }
+        });
+
+        setupHealthCard();
+        setupPOCard();
+    }
+
+    private void setupHealthCard() {
+
+        binding.addHealthIssueButton.setOnClickListener(v -> {
+            dialog = new MultipleDiseasesDialog();
+            dialog.show(getSupportFragmentManager(), MultipleDiseasesDialog.TAG);
+        });
+
+//        binding.editHealthIssueButton.setOnClickListener(v -> {
+//            editSurveyData();
+//        });
+    }
+
+    private void setupPOCard() {
+        //TODO: Validations
+        if (patientID_edit == null)
+            sessionManager.setNoOfclicks(0);
+
+
+        binding.addPregnancyOutcomeButton.setOnClickListener(v -> {
+            if (!binding.edittextNoOfPregnancyOutcomePastTwoYrs.getText().toString().isEmpty() &&
+                    !binding.edittextNoOfPregnancyOutcomePastTwoYrs.getText().toString().equals("") &&
+                    pregnancyOutcomesList.size() < Integer.parseInt(binding.edittextNoOfPregnancyOutcomePastTwoYrs.getText().toString())) {
+
+                PregnancyRosterDialog dialog = new PregnancyRosterDialog(
+                        sessionManager.getNoOfclicks(),
+                        edittext_howmanytimmespregnant.getText().toString(),
+                        StringUtils.getPasttwoyrs(spinner_pregnantpasttwoyrs.getSelectedItem().toString(), sessionManager.getAppLanguage()),
+                        binding.edittextNoOfPregnancyOutcomePastTwoYrs.getText().toString()); //TODO: support transaltions...
+
+                dialog.show(getSupportFragmentManager(), PregnancyRosterDialog.TAG);
+            } else {
+                if (!binding.edittextNoOfPregnancyOutcomePastTwoYrs.getText().toString().isEmpty() &&
+                        !binding.edittextNoOfPregnancyOutcomePastTwoYrs.getText().toString().equals("")) {
+                    Toast.makeText(context, R.string.no_of_times_pasttwoyrs_limit_toast, Toast.LENGTH_SHORT).show();
+                } else {
+                    //
+                }
+
             }
         });
     }

@@ -1,7 +1,9 @@
 package org.intelehealth.app.activities.identificationActivity;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
@@ -21,7 +23,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.DialogFragment;
 
 import org.intelehealth.app.R;
 import org.intelehealth.app.databinding.DialogPregnancyRosterBinding;
@@ -35,7 +36,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-import static org.intelehealth.app.utilities.StringUtils.en__hi_dob;
 import static org.intelehealth.app.utilities.StringUtils.en__mr_dob;
 
 public class PregnancyRosterDialog extends DialogFragment {
@@ -64,16 +64,18 @@ public class PregnancyRosterDialog extends DialogFragment {
     public final String SELECT = "Select";
     public final String SELECT_BLOCK = "Select Block";
 
+
+    public PregnancyRosterDialog() {
+
+    }
+
+
     public PregnancyRosterDialog(int noOfClicks, String howmanytimespregnant, String pregnancyoutcomeInTwoYrs, String noOftimesPregnantTwoYrs) {
         this.noOfClicks = noOfClicks;
         this.howmanytimespregnant = howmanytimespregnant;
         this.pregnancyoutcomeInTwoYrs = pregnancyoutcomeInTwoYrs;
         Logger.logD("Outcome", pregnancyoutcomeInTwoYrs);
         this.noOftimesPregnantTwoYrs = noOftimesPregnantTwoYrs;
-    }
-
-    public PregnancyRosterDialog() {
-
     }
 
     @Override

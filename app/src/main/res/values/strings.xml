@@ -1566,12 +1566,11 @@
     <string name="please_select_your_cancel_reason">Please select your cancel reason</string>
     <string name="doctor_is_not_available">Doctor is not available</string>
     <string name="patient_is_not_available">Patient is not available</string>
-    <string name="others">Others</string>
     <string name="please_enter_the_reason_details">Please enter the reason details</string>
     <string name="save_amp_proceed"><![CDATA[Save & Proceed]]></string>
     <string name="please_enter_reason_txt">Please enter the reason!</string>
     <string name="answer_following_questions">Following are the compulsory questions, Please answer them.</string>
     <string name="and">”, and “</string>
-    <string name="app_version_string">App Version - %1$s</string>
+    <string name="protocol_download_failed_alertdialog">Unable to download protocol. Press \'yes\' to retry the protocol download. Press \'No\' to continue with the demo protocol.</string>
     <!--Appointment END-->
 </resources>
