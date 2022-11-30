@@ -6391,5 +6391,157 @@ public final class StringUtils {
 
         return val;
     }
+    //TODO: Add occupations new data...
+    public static String getOccupationsIdentification(String val, String locale) {
+        if (locale.equalsIgnoreCase("mr")) {
+            switch (val) {
+                case "पगारदार सरकारी नोकरी":
+                    val = "Salaried Government Job";
+                    break;
+                case "पगारदार खाजगी नोकरी":
+                    val = "Salaried Private Job";
+                    break;
+                case "लहान व्यवसाय / दुकान मालक":
+                    val = "Petty Business or Shop Owner";
+                    break;
+                case "तंत्रज्ञान / कारागीर / इतर कुशल काम (चालक, मेसन इ.)":
+                    val = "Technician or Craftsman or Other Skilled Work (Driver, Mason Etc)";
+                    break;
+                case "कृषी शेतकरी":
+                    val = "Agricultural Farmer";
+                    break;
+                case "भाडेकरी शेतकरी / कृषी दैनिक वेतन कार्यकर्ता":
+                    val = "Tenant Farmer or Agricultural Daily Wage Worker";
+                    break;
+                case "दैनिक वेतन कर्मचारी (अकुशल काम)":
+                    val = "Daily Wage Worker (Unskilled Work)";
+                    break;
+                case "घरगुती काम":
+                    val = "Household Work";
+                    break;
+                case "विद्यार्थी":
+                    val = "Student";
+                    break;
+                case "बेरोजगार":
+                    val = "Unemployed";
+                    break;
+                case "सेवानिवृत्त (पेंशनसह)":
+                    val = "Retired (With Pension)";
+                    break;
+                case "सेवानिवृत्त (पेंशनशिवाय)":
+                    val = "Retired (Without Pension)";
+                    break;
+                case "इतर (स्पष्ट करा)":
+                    val = "Others (Specify)";
+                    break;
+                default:
+                    return val;
+            }
 
+        }
+        return val;
+    }
+
+    public static String getOccupation_edit(String val, String locale) {
+        if (locale.equalsIgnoreCase("mr")) {
+            switch (val) {
+                case "Sale of cereal production (wheat, maize, barley), cash crops (cotton, sugarcane, jute), or vegetables and fruits":
+                    val = "अन्नधान्य उत्पादन (गहू, मका, बार्ली), नगदी  पिके (कापूस, ऊस, जूट), किंवा भाज्या आणि फळे विक्री";
+                    break;
+                case "Sale of animals/animal products":
+                    val = "प्राणी / प्राणी उत्पादने विक्री";
+                    break;
+                case "Agricultural wage labor (employed for farm work)":
+                    val = "कृषि वेतन श्रम (शेतीच्या कामासाठी कार्यरत)";
+                    break;
+                case "Salaried worker (fixed monthly salary) - Government, private, etc.":
+                    val = "पगारदार कर्मचारी (निश्चित मासिक वेतन) - सरकार, खाजगी, इ.";
+                    break;
+                case "Self-employed (non-agriculture/petty business)":
+                    val = "स्वयंरोजगार (बिगर शेती/ किरकोळ व्यवसाय)";
+                    break;
+                case "Daily labor (unskilled work - Agricultural/non-Agricultural)":
+                    val = "दैनंदिन मजूर (अकुशल काम - कृषी, कृषी सोडून इतर)";
+                    break;
+                case "NREGA":
+                    val = "नरेगा";
+                    break;
+                case "Seasonal Labor":
+                    val = "हंगामी श्रम";
+                    break;
+                case "No paid work":
+                    val = "पैसे दिले नाहीत";
+                    break;
+                case "Pension":
+                    val = "पेंशन";
+                    break;
+                case "Remittances":
+                    val = "प्रेषण";
+                    break;
+                case "Other (please specify)":
+                    val = "इतर (कृपया स्पष्ट करा)";
+                    break;
+                case "Other sources of income":
+                    val = "उत्पन्नाचे इतर स्त्रोत";
+
+                    break;
+                default:
+                    return val;
+            }
+        }
+
+        return val;
+    }
+
+    public static String getOccupation(String val, String locale) {
+        if (locale.equalsIgnoreCase("mr")) {
+            switch (val) {
+
+                case "अन्नधान्य उत्पादन (गहू, मका, बार्ली), नगदी  पिके (कापूस, ऊस, जूट), किंवा भाज्या आणि फळे विक्री":
+                    val = "Sale of cereal production (wheat, maize, barley), cash crops (cotton, sugarcane, jute), or vegetables and fruits";
+                    break;
+                case "प्राणी / प्राणी उत्पादने विक्री":
+                    val = "Sale of animals/animal products";
+                    break;
+                case "कृषि वेतन श्रम (शेतीच्या कामासाठी कार्यरत)":
+                    val = "Agricultural wage labor (employed for farm work)";
+                    break;
+                case "पगारदार कर्मचारी (निश्चित मासिक वेतन) - सरकार, खाजगी, इ.":
+                    val = "Salaried worker (fixed monthly salary) - Government, private, etc.";
+                    break;
+                case "स्वयंरोजगार (बिगर शेती/ किरकोळ व्यवसाय )":
+                    val = "Self-employed (non-agriculture/petty business)";
+                    break;
+                case "दैनंदिन मजूर (अकुशल काम - कृषी, कृषी सोडून इतर)":
+                    val = "Daily labor (unskilled work - Agricultural/non-Agricultural)";
+                    break;
+                case "नरेगा":
+                    val = "NREGA";
+                    break;
+                case "हंगामी श्रम":
+                    val = "Seasonal Labor";
+                    break;
+                case "पैसे दिले नाहीत":
+                    val = "No paid work";
+                    break;
+                case "पेंशन":
+                    val = "Pension";
+                    break;
+                case "प्रेषण":
+                    val = "Remittances";
+                    break;
+                case "इतर (कृपया स्पष्ट करा)":
+                    val = "Other (please specify)";
+                    break;
+                case "उत्पन्नाचे इतर स्त्रोत":
+                    val = "Other sources of income";
+                    break;
+
+                default:
+                    return val;
+            }
+        }
+
+        return val;
+    }
 }
