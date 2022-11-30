@@ -156,6 +156,7 @@ public class IdentificationActivity extends AppCompatActivity implements SurveyC
     SessionManager sessionManager = null;
     private boolean hasLicense = false;
     private ArrayAdapter<CharSequence> educationAdapter;
+    private ArrayAdapter<CharSequence> occupationAdapter;
     private ArrayAdapter<CharSequence> casteAdapter;
     private LinearLayout pregnancyQuestionsLinearLayout;
     //    private ArrayAdapter<CharSequence> economicStatusAdapter;
@@ -191,7 +192,7 @@ public class IdentificationActivity extends AppCompatActivity implements SurveyC
     RadioButton mGenderF;
     RadioButton mGenderO;
 //    EditText mRelationship;
-    EditText mOccupation;
+    Spinner mOccupation;
     EditText countryText;
     EditText stateText;
     EditText casteText;
@@ -409,13 +410,13 @@ public class IdentificationActivity extends AppCompatActivity implements SurveyC
                 mRelationship.setVisibility(View.VISIBLE);
             } else {
                 mRelationship.setVisibility(View.GONE);
-            }
+            }*/
             if (obj.getBoolean("mOccupation")) {
                 mOccupation.setVisibility(View.VISIBLE);
             } else {
                 mOccupation.setVisibility(View.GONE);
             }
-            if (obj.getBoolean("casteLayout")) {
+            /*if (obj.getBoolean("casteLayout")) {
                 casteLayout.setVisibility(View.VISIBLE);
             } else {
                 casteLayout.setVisibility(View.GONE);
@@ -555,7 +556,16 @@ public class IdentificationActivity extends AppCompatActivity implements SurveyC
             Toast.makeText(this, R.string.education_values_missing, Toast.LENGTH_SHORT).show();
             Logger.logE("Identification", "#648", e);
         }
-
+        try {
+            String occupationLanguage = "occupation_identification_" + sessionManager.getAppLanguage();
+            int occupations = res.getIdentifier(occupationLanguage, "array", getApplicationContext().getPackageName());
+            if (occupations != 0) {
+                occupationAdapter = ArrayAdapter.createFromResource(this, occupations, R.layout.custom_spinner);
+            }
+        } catch (Exception e) {
+            Toast.makeText(this, R.string.occupation_values_missing, Toast.LENGTH_SHORT).show();
+        }
+        mOccupation.setAdapter(occupationAdapter);
 
         if (null == patientID_edit || patientID_edit.isEmpty()) {
             generateUuid();
@@ -1345,6 +1355,25 @@ public class IdentificationActivity extends AppCompatActivity implements SurveyC
         economicLayout = findViewById(R.id.identification_txtleconomic);
         educationLayout = findViewById(R.id.identification_txtleducation);*/
 
+        mOccupation = findViewById(R.id.spinner_occupation);
+        til_occupation_other = findViewById(R.id.til_occupation_other);
+        et_occupation_other = findViewById(R.id.et_occupation_other);
+        mOccupation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position == 13) {
+                    til_occupation_other.setVisibility(View.VISIBLE);
+                } else {
+                    til_occupation_other.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         mEducation = findViewById(R.id.spinner_education);
         countryStateLayout = findViewById(R.id.identification_llcountry_state);
         mImageView = findViewById(R.id.imageview_id_picture);
@@ -1591,6 +1620,19 @@ public class IdentificationActivity extends AppCompatActivity implements SurveyC
             int spinner_position = adapter_bpchecked.getPosition(bp_Transl);
             Log.d("115,", "bpmm" + spinner_position);
             spinner_bpchecked.setSelection(spinner_position);
+        }
+
+        if (patient1.getOccupation() != null && !patient1.getOccupation().equalsIgnoreCase("")) {
+            String occupation_Transl = "";
+            occupation_Transl = getOccupationsIdentification_Edit(patient1.getOccupation(), sessionManager.getAppLanguage());
+            int spinner_position = occupationAdapter.getPosition(occupation_Transl);
+            if (spinner_position == -1) {
+                mOccupation.setSelection(13);
+                et_occupation_other.setVisibility(View.VISIBLE);
+                et_occupation_other.setText(patient1.getOccupation());
+            } else {
+                mOccupation.setSelection(spinner_position);
+            }
         }
 
 
@@ -2844,10 +2886,14 @@ public class IdentificationActivity extends AppCompatActivity implements SurveyC
             return;
         }
 
-        if (mOccupation.getText().toString().equals("")) {
-            mOccupation.setError(getString(R.string.error_field_required));
+        if (mOccupation.getSelectedItemPosition() == 0) {
+            TextView t = (TextView) mOccupation.getSelectedView();
+            t.setError(getString(R.string.select));
+            t.setTextColor(Color.RED);
+            focusView = mOccupation;
+            cancel = true;
+            return;
         }
-
         //Other
         if (til_occupation_other.getVisibility() == View.VISIBLE) {
             if (et_occupation_other.getText().toString().equals("")) {
@@ -2858,6 +2904,15 @@ public class IdentificationActivity extends AppCompatActivity implements SurveyC
             }
         }
 
+        if (((String) mOccupation.getSelectedItem()).equals(getString(R.string.other_please_specify))) {
+            String occupation = Objects.requireNonNull(til_occupation_other.getEditText()).getText().toString();
+            if (occupation.equals("")) {
+                til_occupation_other.getEditText().setError(getString(R.string.error_field_required));
+                focusView = til_occupation_other.getEditText();
+                cancel = true;
+                return;
+            }
+        }
 
         if (spinner_phoneownership.getSelectedItemPosition() == 0) {
             TextView t = (TextView) spinner_phoneownership.getSelectedView();
@@ -2909,7 +2964,7 @@ public class IdentificationActivity extends AppCompatActivity implements SurveyC
         if (llPORoaster.getVisibility() == View.VISIBLE) {
             if (edittext_howmanytimmespregnant.getText().toString().equalsIgnoreCase("") &&
                     edittext_howmanytimmespregnant.getText().toString().isEmpty()) {
-                edittext_howmanytimmespregnant.setError(getString(R.string.select));
+                edittext_howmanytimmespregnant.setError(getString(R.string.error_field_required));
                 focusView = edittext_howmanytimmespregnant;
                 cancel = true;
                 return;
@@ -3034,6 +3089,17 @@ public class IdentificationActivity extends AppCompatActivity implements SurveyC
             patientAttributesDTO = new PatientAttributesDTO();
             patientAttributesDTO.setUuid(UUID.randomUUID().toString());
             patientAttributesDTO.setPatientuuid(uuid);
+            patientAttributesDTO.setPersonAttributeTypeUuid(patientsDAO.getUuidForAttribute("occupation"));
+            if (til_occupation_other.getVisibility() == View.GONE)
+                patientAttributesDTO.setValue(StringUtils.getOccupationsIdentification(mOccupation.getSelectedItem().toString(), sessionManager.getAppLanguage()));
+            else
+                patientAttributesDTO.setValue(StringUtils.getValue(et_occupation_other.getText().toString()));
+
+            patientAttributesDTOList.add(patientAttributesDTO);
+
+            patientAttributesDTO = new PatientAttributesDTO();
+            patientAttributesDTO.setUuid(UUID.randomUUID().toString());
+            patientAttributesDTO.setPatientuuid(uuid);
             patientAttributesDTO.setPersonAttributeTypeUuid(patientsDAO.getUuidForAttribute("Education Level"));
             patientAttributesDTO.setValue(StringUtils.getProvided(mEducation));
             patientAttributesDTOList.add(patientAttributesDTO);
@@ -3054,7 +3120,7 @@ public class IdentificationActivity extends AppCompatActivity implements SurveyC
                 patientAttributesDTO.setUuid(UUID.randomUUID().toString());
                 patientAttributesDTO.setPatientuuid(uuid);
                 patientAttributesDTO.setPersonAttributeTypeUuid
-                        (patientsDAO.getUuidForAttribute("householdID"));
+                        (patientsDAO.getUuidForAttribute("HouseHold"));
                 patientAttributesDTO.setValue(HouseHold_UUID);
 
             } else {
@@ -3064,7 +3130,7 @@ public class IdentificationActivity extends AppCompatActivity implements SurveyC
                 patientAttributesDTO.setUuid(UUID.randomUUID().toString());
                 patientAttributesDTO.setPatientuuid(uuid);
                 patientAttributesDTO.setPersonAttributeTypeUuid
-                        (patientsDAO.getUuidForAttribute("householdID"));
+                        (patientsDAO.getUuidForAttribute("HouseHold"));
                 patientAttributesDTO.setValue(HouseHold_UUID);
 
             }
@@ -3348,8 +3414,32 @@ public class IdentificationActivity extends AppCompatActivity implements SurveyC
             return;
         }
 
-        if (mOccupation.getText().toString().equals("")) {
-            mOccupation.setError(getString(R.string.error_field_required));
+        if (mOccupation.getSelectedItemPosition() == 0) {
+            TextView t = (TextView) mOccupation.getSelectedView();
+            t.setError(getString(R.string.select));
+            t.setTextColor(Color.RED);
+            focusView = mOccupation;
+            cancel = true;
+            return;
+        }
+        //Other
+        if (til_occupation_other.getVisibility() == View.VISIBLE) {
+            if (et_occupation_other.getText().toString().equals("")) {
+                et_occupation_other.setError(getString(R.string.error_field_required));
+                focusView = et_occupation_other;
+                cancel = true;
+                return;
+            }
+        }
+
+        if (((String) mOccupation.getSelectedItem()).equals(getString(R.string.other_please_specify))) {
+            String occupation = Objects.requireNonNull(til_occupation_other.getEditText()).getText().toString();
+            if (occupation.equals("")) {
+                til_occupation_other.getEditText().setError(getString(R.string.error_field_required));
+                focusView = til_occupation_other.getEditText();
+                cancel = true;
+                return;
+            }
         }
 
         if (spinner_phoneownership.getSelectedItemPosition() == 0) {
