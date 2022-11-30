@@ -1,9 +1,7 @@
 package org.intelehealth.app.activities.identificationActivity;
 
-import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
@@ -23,6 +21,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.DialogFragment;
 
 import org.intelehealth.app.R;
 import org.intelehealth.app.databinding.DialogPregnancyRosterBinding;
@@ -37,6 +36,7 @@ import java.util.Calendar;
 import java.util.Locale;
 
 import static org.intelehealth.app.utilities.StringUtils.en__mr_dob;
+import static org.intelehealth.app.utilities.StringUtils.getChildAlive;
 
 public class PregnancyRosterDialog extends DialogFragment {
 
@@ -64,12 +64,6 @@ public class PregnancyRosterDialog extends DialogFragment {
     public final String SELECT = "Select";
     public final String SELECT_BLOCK = "Select Block";
 
-
-    public PregnancyRosterDialog() {
-
-    }
-
-
     public PregnancyRosterDialog(int noOfClicks, String howmanytimespregnant, String pregnancyoutcomeInTwoYrs, String noOftimesPregnantTwoYrs) {
         this.noOfClicks = noOfClicks;
         this.howmanytimespregnant = howmanytimespregnant;
@@ -77,6 +71,11 @@ public class PregnancyRosterDialog extends DialogFragment {
         Logger.logD("Outcome", pregnancyoutcomeInTwoYrs);
         this.noOftimesPregnantTwoYrs = noOftimesPregnantTwoYrs;
     }
+
+    public PregnancyRosterDialog() {
+
+    }
+
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -87,15 +86,15 @@ public class PregnancyRosterDialog extends DialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sessionManager = new SessionManager(requireActivity());
+        sessionManager = new SessionManager(getActivity());
         bundle = getArguments();
     }
 
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
-        LayoutInflater inflater = requireActivity().getLayoutInflater();
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        LayoutInflater inflater = getActivity().getLayoutInflater();
         binding = DialogPregnancyRosterBinding.inflate(inflater);
 
         mDOBYear = today.get(Calendar.YEAR);
@@ -156,9 +155,9 @@ public class PregnancyRosterDialog extends DialogFragment {
         // Pregnancy Outcome Adapter
         try {
             String outcomepregnancyLanguage = "outcomepregnancy_" + sessionManager.getAppLanguage();
-            int outcomepregnancy_id = getResources().getIdentifier(outcomepregnancyLanguage, "array", requireActivity().getApplicationContext().getPackageName());
+            int outcomepregnancy_id = getResources().getIdentifier(outcomepregnancyLanguage, "array", getActivity().getApplicationContext().getPackageName());
             if (outcomepregnancy_id != 0) {
-                adapter_outcomepregnancy = ArrayAdapter.createFromResource(requireContext(), outcomepregnancy_id, android.R.layout.simple_spinner_dropdown_item);
+                adapter_outcomepregnancy = ArrayAdapter.createFromResource(getContext(), outcomepregnancy_id, android.R.layout.simple_spinner_dropdown_item);
             }
             binding.spinnerOutcomepregnancy.setAdapter(adapter_outcomepregnancy);
         } catch (Exception e) {
@@ -168,7 +167,7 @@ public class PregnancyRosterDialog extends DialogFragment {
         // Child Alive Adapter
         try {
             String childaliveLanguage = "childalive_" + sessionManager.getAppLanguage();
-            int childalive_id = getResources().getIdentifier(childaliveLanguage, "array", requireActivity().getApplicationContext().getPackageName());
+            int childalive_id = getResources().getIdentifier(childaliveLanguage, "array", getActivity().getApplicationContext().getPackageName());
             if (childalive_id != 0) {
                 adapter_childalive = ArrayAdapter.createFromResource(getContext(), childalive_id, android.R.layout.simple_spinner_dropdown_item);
             }
@@ -180,7 +179,7 @@ public class PregnancyRosterDialog extends DialogFragment {
         // Child Pre Term Adapter
         try {
             String childPreTermLanguage = "child_pre_term_" + sessionManager.getAppLanguage();
-            int childPreTermId = getResources().getIdentifier(childPreTermLanguage, "array", requireActivity().getApplicationContext().getPackageName());
+            int childPreTermId = getResources().getIdentifier(childPreTermLanguage, "array", getActivity().getApplicationContext().getPackageName());
             if (childPreTermId != 0) {
                 adapterChildPreTerm = ArrayAdapter.createFromResource(getContext(), childPreTermId, android.R.layout.simple_spinner_dropdown_item);
             }
@@ -192,7 +191,7 @@ public class PregnancyRosterDialog extends DialogFragment {
         // Place Of Delivery Adapter
         try {
             String placedeliveryLanguage = "placedelivery_" + sessionManager.getAppLanguage();
-            int placedelivery_id = getResources().getIdentifier(placedeliveryLanguage, "array", requireActivity().getApplicationContext().getPackageName());
+            int placedelivery_id = getResources().getIdentifier(placedeliveryLanguage, "array", getActivity().getApplicationContext().getPackageName());
             if (placedelivery_id != 0) {
                 adapter_placeofdeliverypregnant = ArrayAdapter.createFromResource(getContext(), placedelivery_id, android.R.layout.simple_spinner_dropdown_item);
             }
@@ -203,7 +202,7 @@ public class PregnancyRosterDialog extends DialogFragment {
 
         try {
             String deliveryTypeLanguage = "delivery_type_" + sessionManager.getAppLanguage();
-            int deliveryTypeId = getResources().getIdentifier(deliveryTypeLanguage, "array", requireActivity().getApplicationContext().getPackageName());
+            int deliveryTypeId = getResources().getIdentifier(deliveryTypeLanguage, "array", getActivity().getApplicationContext().getPackageName());
             if (deliveryTypeId != 0) {
                 adapterDeliveryType = ArrayAdapter.createFromResource(getContext(), deliveryTypeId, android.R.layout.simple_spinner_dropdown_item);
             }
@@ -215,7 +214,7 @@ public class PregnancyRosterDialog extends DialogFragment {
         // Focal Facility Adapter
         try {
             String focalBlockLanguage = "block_" + sessionManager.getAppLanguage();
-            int focalBlock_id = getResources().getIdentifier(focalBlockLanguage, "array", requireActivity().getApplicationContext().getPackageName());
+            int focalBlock_id = getResources().getIdentifier(focalBlockLanguage, "array", getActivity().getApplicationContext().getPackageName());
             if (focalBlock_id != 0) {
                 adapter_focalPointBlock = ArrayAdapter.createFromResource(getContext(), focalBlock_id, android.R.layout.simple_spinner_dropdown_item);
             }
@@ -227,7 +226,7 @@ public class PregnancyRosterDialog extends DialogFragment {
         // Single / Multiple Births Adapter
         try {
             String singlemultipleLanguage = "singlemultiplebirths_" + sessionManager.getAppLanguage();
-            int singlemultiple_id = getResources().getIdentifier(singlemultipleLanguage, "array", requireActivity().getApplicationContext().getPackageName());
+            int singlemultiple_id = getResources().getIdentifier(singlemultipleLanguage, "array", getActivity().getApplicationContext().getPackageName());
             if (singlemultiple_id != 0) {
                 adapter_singlemultiplebirths = ArrayAdapter.createFromResource(getContext(), singlemultiple_id, android.R.layout.simple_spinner_dropdown_item);
             }
@@ -241,7 +240,7 @@ public class PregnancyRosterDialog extends DialogFragment {
         // Sex of the Baby Adapter
         try {
             String sexbabyLanguage = "sexofbaby_" + sessionManager.getAppLanguage();
-            int sexbaby_id = getResources().getIdentifier(sexbabyLanguage, "array", requireActivity().getApplicationContext().getPackageName());
+            int sexbaby_id = getResources().getIdentifier(sexbabyLanguage, "array", getActivity().getApplicationContext().getPackageName());
             if (sexbaby_id != 0) {
                 adapter_sexofbaby = ArrayAdapter.createFromResource(getContext(), sexbaby_id, android.R.layout.simple_spinner_dropdown_item);
             }
@@ -254,7 +253,7 @@ public class PregnancyRosterDialog extends DialogFragment {
         // Pregnancy Planned Adapter
         try {
             String pregnancyplannedLanguage = "pregnancyplanned_" + sessionManager.getAppLanguage();
-            int pregnancyplanned_id = getResources().getIdentifier(pregnancyplannedLanguage, "array", requireActivity().getApplicationContext().getPackageName());
+            int pregnancyplanned_id = getResources().getIdentifier(pregnancyplannedLanguage, "array", getActivity().getApplicationContext().getPackageName());
             if (pregnancyplanned_id != 0) {
                 adapter_pregnancyplanned = ArrayAdapter.createFromResource(getContext(),
                         pregnancyplanned_id, android.R.layout.simple_spinner_dropdown_item);
@@ -267,7 +266,7 @@ public class PregnancyRosterDialog extends DialogFragment {
         // High Risk Pregnancy Adapter
         try {
             String highriskpregnancyLanguage = "highriskpregnancy_" + sessionManager.getAppLanguage();
-            int highriskpregnancy_id = getResources().getIdentifier(highriskpregnancyLanguage, "array", requireActivity().getApplicationContext().getPackageName());
+            int highriskpregnancy_id = getResources().getIdentifier(highriskpregnancyLanguage, "array", getActivity().getApplicationContext().getPackageName());
             if (highriskpregnancy_id != 0) {
                 adapter_pregnancyhighriskcase = ArrayAdapter.createFromResource(getContext(), highriskpregnancy_id, android.R.layout.simple_spinner_dropdown_item);
             }
@@ -279,7 +278,7 @@ public class PregnancyRosterDialog extends DialogFragment {
         // Pregnancy Complications Adapter
         try {
             String complicationsLanguage = "complications_" + sessionManager.getAppLanguage();
-            int complications_id = getResources().getIdentifier(complicationsLanguage, "array", requireActivity().getApplicationContext().getPackageName());
+            int complications_id = getResources().getIdentifier(complicationsLanguage, "array", getActivity().getApplicationContext().getPackageName());
             if (complications_id != 0) {
                 adapter_pregnancycomplications = ArrayAdapter.createFromResource(getContext(), complications_id, android.R.layout.simple_spinner_dropdown_item);
             }

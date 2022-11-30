@@ -215,6 +215,7 @@
                                 android:drawableStart="@drawable/male_icon"
                                 android:drawableLeft="@drawable/male_icon"
                                 android:fontFamily="@font/lato_regular"
+                                android:maxLines="1"
                                 android:text="@string/identification_screen_checkbox_male"
                                 android:textSize="@dimen/card_content_sub_text_size" />
 

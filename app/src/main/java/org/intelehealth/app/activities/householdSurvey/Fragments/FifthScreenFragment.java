@@ -26,7 +26,6 @@ import org.intelehealth.app.app.IntelehealthApplication;
 import org.intelehealth.app.database.dao.PatientsDAO;
 import org.intelehealth.app.database.dao.SyncDAO;
 import org.intelehealth.app.databinding.FragmentFifthScreenBinding;
-import org.intelehealth.app.databinding.FragmentFourthScreenBinding;
 import org.intelehealth.app.models.dto.PatientAttributesDTO;
 import org.intelehealth.app.utilities.NetworkConnection;
 import org.intelehealth.app.utilities.SessionManager;
