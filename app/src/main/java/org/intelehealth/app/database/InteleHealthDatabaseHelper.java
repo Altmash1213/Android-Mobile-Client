@@ -242,19 +242,19 @@ public class InteleHealthDatabaseHelper extends SQLiteOpenHelper {
             db.execSQL("INSERT OR REPLACE INTO tbl_uuid_dictionary (uuid,name,price,retired) VALUES('a86ac96e-2e07-47a7-8e72-8216a1a75bfd','VISIT_TELEMEDICINE', null, 0)");
             db.execSQL("INSERT OR REPLACE INTO tbl_uuid_dictionary (uuid,name,price,retired) VALUES('78284507-fb71-4354-9b34-046ab205e18f','RATING', null, 0)");
             db.execSQL("INSERT OR REPLACE INTO tbl_uuid_dictionary (uuid,name,price,retired) VALUES('36d207d6-bee7-4b3e-9196-7d053c6eddce','COMMENTS', null, 0)");
-            db.execSQL("INSERT OR REPLACE INTO tbl_uuid_dictionary (uuid,name,price,retired) VALUES('7030c68e-eecc-4656-bb0a-e465aea6195f','Visit Billing Details', null, 0)");
-            db.execSQL("INSERT OR REPLACE INTO tbl_uuid_dictionary (uuid,name,price,retired) VALUES('ff82d253-877a-4970-a03f-3da16bee2a4a','Blood Sugar (Non-Fasting)', null, 0)");
-            db.execSQL("INSERT OR REPLACE INTO tbl_uuid_dictionary (uuid,name,price,retired) VALUES('d7670f6a-377f-4807-92c8-26dc339fb0fe','Blood Sugar (Random)', null, 0)");
-            db.execSQL("INSERT OR REPLACE INTO tbl_uuid_dictionary (uuid,name,price,retired) VALUES('790cbe32-4a85-4953-a3a6-4f6b0e26336e','Blood Sugar ( Post-prandial)', null, 0)");
-            db.execSQL("INSERT OR REPLACE INTO tbl_uuid_dictionary (uuid,name,price,retired) VALUES('f6763c8d-c5e5-4e51-945c-c3d991b12fe2','Blood Glucose (Fasting)', null, 0)");
-            db.execSQL("INSERT OR REPLACE INTO tbl_uuid_dictionary (uuid,name,price,retired) VALUES('71f0aadf-2a15-420f-897a-145dfc87fcd1','Haemoglobin Test', null, 0)");
-            db.execSQL("INSERT OR REPLACE INTO tbl_uuid_dictionary (uuid,name,price,retired) VALUES('e331ccc4-7995-41d5-abe6-15b3e5ead1b1','SERUM URIC ACID', null, 0)");
-            db.execSQL("INSERT OR REPLACE INTO tbl_uuid_dictionary (uuid,name,price,retired) VALUES('9d2f0fcc-538f-11e6-9cfe-86f436325720','TOTAL CHOLESTEROL', null, 0)");
-            db.execSQL("INSERT OR REPLACE INTO tbl_uuid_dictionary (uuid,name,price,retired) VALUES('82be928b-5b17-4f44-86f0-3b75ffc56839','Billing Visit Type Consultation', null, 0)");
+            db.execSQL("INSERT OR REPLACE INTO tbl_uuid_dictionary (uuid,name,price,retired) VALUES('b9c99efc-582a-4e2d-bf26-36dc22bcb711','Visit Billing Details', null, 0)");
+            db.execSQL("INSERT OR REPLACE INTO tbl_uuid_dictionary (uuid,name,price,retired) VALUES('3bd52eef-5f97-47ba-89d8-88570d5c6597','Blood Sugar (Non-Fasting)', null, 0)");
+            db.execSQL("INSERT OR REPLACE INTO tbl_uuid_dictionary (uuid,name,price,retired) VALUES('7fb113a5-e672-4a92-b6ce-fe4d52e15fc1','Blood Sugar (Random)', null, 0)");
+            db.execSQL("INSERT OR REPLACE INTO tbl_uuid_dictionary (uuid,name,price,retired) VALUES('5300acdd-7a1d-4971-b5d3-d3ce4cdf84be','Blood Sugar ( Post-prandial)', null, 0)");
+            db.execSQL("INSERT OR REPLACE INTO tbl_uuid_dictionary (uuid,name,price,retired) VALUES('956f9f02-d397-48a0-9c02-8e77914f4a59','Blood Glucose (Fasting)', null, 0)");
+            db.execSQL("INSERT OR REPLACE INTO tbl_uuid_dictionary (uuid,name,price,retired) VALUES('cb627ba4-14aa-44f5-b63d-e19915ca70bb','Haemoglobin', null, 0)");
+            db.execSQL("INSERT OR REPLACE INTO tbl_uuid_dictionary (uuid,name,price,retired) VALUES('a787e200-955f-4361-b7f9-6daaba6ea711','Uric Acid Measurement', null, 0)");
+            db.execSQL("INSERT OR REPLACE INTO tbl_uuid_dictionary (uuid,name,price,retired) VALUES('bec94253-e20a-49d5-b5b2-ce05b4b69bbb','Cholesterol', null, 0)");
+            db.execSQL("INSERT OR REPLACE INTO tbl_uuid_dictionary (uuid,name,price,retired) VALUES('8dc446b1-5305-4624-8713-47178d1bc41b','Billing Visit Type', null, 0)");
             db.execSQL("INSERT OR REPLACE INTO tbl_uuid_dictionary (uuid,name,price,retired) VALUES('4702a502-15c3-4759-99f0-bb685c374541','Billing Visit Type Followup', null, 0)");
-            db.execSQL("INSERT OR REPLACE INTO tbl_uuid_dictionary (uuid,name,price,retired) VALUES('ba8b1ed9-ec2f-4bab-9e0e-c60fcb44c918','Bill Paid Status', null, 0)");
-            db.execSQL("INSERT OR REPLACE INTO tbl_uuid_dictionary (uuid,name,price,retired) VALUES('9fa03f61-8083-4cce-bbc0-d5f752a8ee7b','Receipt Number', null, 0)");
-            db.execSQL("INSERT OR REPLACE INTO tbl_uuid_dictionary (uuid,name,price,retired) VALUES('caa20b34-48a2-4f79-b08e-7be82f379e49','Receipt Date', null, 0)");
+            db.execSQL("INSERT OR REPLACE INTO tbl_uuid_dictionary (uuid,name,price,retired) VALUES('7633b240-b8d9-4a32-9f40-6777ab1f33e4','Bill Paid Status', null, 0)");
+            db.execSQL("INSERT OR REPLACE INTO tbl_uuid_dictionary (uuid,name,price,retired) VALUES('57189357-9446-4db4-9380-408283c2ef11','Receipt Number', null, 0)");
+            db.execSQL("INSERT OR REPLACE INTO tbl_uuid_dictionary (uuid,name,price,retired) VALUES('234da3e9-2394-4dea-9e18-70bb83adb2ae','Receipt Date', null, 0)");
             db.execSQL("INSERT OR REPLACE INTO tbl_uuid_dictionary (uuid,name,price,retired) VALUES('dd51ab03-12ef-43cb-9aef-2ec93a989816','BP Test', null, 0)");
 
 

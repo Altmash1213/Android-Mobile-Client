@@ -419,7 +419,7 @@ public class PatientDetailActivity extends AppCompatActivity {
         intent2.putExtra("encounterUuidAdultIntial", "");
         intent2.putExtra("EncounterAdultInitial_LatestVisit", encounterAdultIntials);
         intent2.putExtra("name", fullName);
-        intent2.putExtra("patientFirstName",patientFName);
+        intent2.putExtra("patientFirstName", patientFName);
         intent2.putExtra("patientLastName", patientLName);
         intent2.putExtra("gender", mGender);
         intent2.putExtra("tag", "new");
@@ -616,21 +616,21 @@ public class PatientDetailActivity extends AppCompatActivity {
             }
 
             //Display the fields on the Add Patient screen as per the config file
-            if (obj.getBoolean("casteLayout")) {
+            /*if (obj.getBoolean("casteLayout")) {
                 casteRow.setVisibility(View.VISIBLE);
             } else {
                 casteRow.setVisibility(View.GONE);
-            }
+            }*/
             if (obj.getBoolean("educationLayout")) {
                 educationRow.setVisibility(View.VISIBLE);
             } else {
                 educationRow.setVisibility(View.GONE);
             }
-            if (obj.getBoolean("economicLayout")) {
+            /*if (obj.getBoolean("economicLayout")) {
                 economicRow.setVisibility(View.VISIBLE);
             } else {
                 economicRow.setVisibility(View.GONE);
-            }
+            }*/
 
         } catch (JSONException e) {
             FirebaseCrashlytics.getInstance().recordException(e);
@@ -746,7 +746,7 @@ public class PatientDetailActivity extends AppCompatActivity {
                     genderView.setText(getResources().getString(R.string.identification_screen_checkbox_male));
                 } else if (patient_new.getGender().equalsIgnoreCase("F")) {
                     genderView.setText(getResources().getString(R.string.identification_screen_checkbox_female));
-                }else if (patient_new.getGender().equalsIgnoreCase("Other")) {
+                } else if (patient_new.getGender().equalsIgnoreCase("Other")) {
                     genderView.setText(getResources().getString(R.string.identification_screen_checkbox_other));
                 } else {
                     genderView.setText(patient_new.getGender());
@@ -756,7 +756,7 @@ public class PatientDetailActivity extends AppCompatActivity {
                     genderView.setText(getResources().getString(R.string.identification_screen_checkbox_male));
                 } else if (patient_new.getGender().equalsIgnoreCase("F")) {
                     genderView.setText(getResources().getString(R.string.identification_screen_checkbox_female));
-                }else if (patient_new.getGender().equalsIgnoreCase("Other")) {
+                } else if (patient_new.getGender().equalsIgnoreCase("Other")) {
                     genderView.setText(getResources().getString(R.string.identification_screen_checkbox_other));
                 } else {
                     genderView.setText(patient_new.getGender());
@@ -766,7 +766,7 @@ public class PatientDetailActivity extends AppCompatActivity {
                     genderView.setText(getResources().getString(R.string.identification_screen_checkbox_male));
                 } else if (patient_new.getGender().equalsIgnoreCase("F")) {
                     genderView.setText(getResources().getString(R.string.identification_screen_checkbox_female));
-                }else if (patient_new.getGender().equalsIgnoreCase("Other")) {
+                } else if (patient_new.getGender().equalsIgnoreCase("Other")) {
                     genderView.setText(getResources().getString(R.string.identification_screen_checkbox_other));
                 } else {
                     genderView.setText(patient_new.getGender());
@@ -776,7 +776,7 @@ public class PatientDetailActivity extends AppCompatActivity {
                     genderView.setText(getResources().getString(R.string.identification_screen_checkbox_male));
                 } else if (patient_new.getGender().equalsIgnoreCase("F")) {
                     genderView.setText(getResources().getString(R.string.identification_screen_checkbox_female));
-                }else if (patient_new.getGender().equalsIgnoreCase("Other")) {
+                } else if (patient_new.getGender().equalsIgnoreCase("Other")) {
                     genderView.setText(getResources().getString(R.string.identification_screen_checkbox_other));
                 } else {
                     genderView.setText(patient_new.getGender());
@@ -788,7 +788,7 @@ public class PatientDetailActivity extends AppCompatActivity {
                     genderView.setText(getResources().getString(R.string.identification_screen_checkbox_female));
                 } else if (patient_new.getGender().equalsIgnoreCase("Other")) {
                     genderView.setText(getResources().getString(R.string.identification_screen_checkbox_other));
-                }else {
+                } else {
                     genderView.setText(patient_new.getGender());
                 }
             } else if (sessionManager.getAppLanguage().equalsIgnoreCase("mr")) {
@@ -796,7 +796,7 @@ public class PatientDetailActivity extends AppCompatActivity {
                     genderView.setText(getResources().getString(R.string.identification_screen_checkbox_male));
                 } else if (patient_new.getGender().equalsIgnoreCase("F")) {
                     genderView.setText(getResources().getString(R.string.identification_screen_checkbox_female));
-                }else if (patient_new.getGender().equalsIgnoreCase("Other")) {
+                } else if (patient_new.getGender().equalsIgnoreCase("Other")) {
                     genderView.setText(getResources().getString(R.string.identification_screen_checkbox_other));
                 } else {
                     genderView.setText(patient_new.getGender());
@@ -808,7 +808,7 @@ public class PatientDetailActivity extends AppCompatActivity {
                     genderView.setText(getResources().getString(R.string.identification_screen_checkbox_female));
                 } else if (patient_new.getGender().equalsIgnoreCase("Other")) {
                     genderView.setText(getResources().getString(R.string.identification_screen_checkbox_other));
-                }else {
+                } else {
                     genderView.setText(patient_new.getGender());
                 }
             } else if (sessionManager.getAppLanguage().equalsIgnoreCase("ru")) {
@@ -816,9 +816,9 @@ public class PatientDetailActivity extends AppCompatActivity {
                     genderView.setText(getResources().getString(R.string.identification_screen_checkbox_male));
                 } else if (patient_new.getGender().equalsIgnoreCase("F")) {
                     genderView.setText(getResources().getString(R.string.identification_screen_checkbox_female));
-                }  else if (patient_new.getGender().equalsIgnoreCase("Other")) {
+                } else if (patient_new.getGender().equalsIgnoreCase("Other")) {
                     genderView.setText(getResources().getString(R.string.identification_screen_checkbox_other));
-                }else {
+                } else {
                     genderView.setText(patient_new.getGender());
                 }
             } else if (sessionManager.getAppLanguage().equalsIgnoreCase("gu")) {
@@ -826,7 +826,7 @@ public class PatientDetailActivity extends AppCompatActivity {
                     genderView.setText(getResources().getString(R.string.identification_screen_checkbox_male));
                 } else if (patient_new.getGender().equalsIgnoreCase("F")) {
                     genderView.setText(getResources().getString(R.string.identification_screen_checkbox_female));
-                }else if (patient_new.getGender().equalsIgnoreCase("Other")) {
+                } else if (patient_new.getGender().equalsIgnoreCase("Other")) {
                     genderView.setText(getResources().getString(R.string.identification_screen_checkbox_other));
                 } else {
                     genderView.setText(patient_new.getGender());
@@ -836,7 +836,7 @@ public class PatientDetailActivity extends AppCompatActivity {
                     genderView.setText(getResources().getString(R.string.identification_screen_checkbox_male));
                 } else if (patient_new.getGender().equalsIgnoreCase("F")) {
                     genderView.setText(getResources().getString(R.string.identification_screen_checkbox_female));
-                }else if (patient_new.getGender().equalsIgnoreCase("Other")) {
+                } else if (patient_new.getGender().equalsIgnoreCase("Other")) {
                     genderView.setText(getResources().getString(R.string.identification_screen_checkbox_other));
                 } else {
                     genderView.setText(patient_new.getGender());
@@ -848,7 +848,7 @@ public class PatientDetailActivity extends AppCompatActivity {
                     genderView.setText(getResources().getString(R.string.identification_screen_checkbox_female));
                 } else if (patient_new.getGender().equalsIgnoreCase("Other")) {
                     genderView.setText(getResources().getString(R.string.identification_screen_checkbox_other));
-                }else {
+                } else {
                     genderView.setText(patient_new.getGender());
                 }
             } else {
@@ -976,152 +976,156 @@ public class PatientDetailActivity extends AppCompatActivity {
         }
 
         // education_statusView.setText(patient_new.getEducation_level());
-        if (patient_new.getEconomic_status().equalsIgnoreCase("Not provided") &&
-                sessionManager.getAppLanguage().equalsIgnoreCase("hi")) {
-            economic_statusView.setText("नहीं दिया गया");
-        } else if (patient_new.getEconomic_status().equalsIgnoreCase("Not provided") &&
-                sessionManager.getAppLanguage().equalsIgnoreCase("or")) {
-            economic_statusView.setText("ଦିଅ ଯାଇ ନାହିଁ");
-        } else if (patient_new.getEconomic_status().equalsIgnoreCase("Not provided") &&
-                sessionManager.getAppLanguage().equalsIgnoreCase("ta")) {
-            economic_statusView.setText("வழங்கப்படவில்லை");
-        } else if (patient_new.getEconomic_status().equalsIgnoreCase("Not provided") &&
-                sessionManager.getAppLanguage().equalsIgnoreCase("gu")) {
-            economic_statusView.setText("પૂરી પાડવામાં આવેલ નથી");
-        } else if (patient_new.getEconomic_status().equalsIgnoreCase("Not provided") &&
-                sessionManager.getAppLanguage().equalsIgnoreCase("te")) {
-            economic_statusView.setText("సమకూర్చబడలేదు");
-        } else if (patient_new.getEconomic_status().equalsIgnoreCase("Not provided") &&
-                sessionManager.getAppLanguage().equalsIgnoreCase("mr")) {
-            economic_statusView.setText("झाले नाही");
-        } else if (patient_new.getEconomic_status().equalsIgnoreCase("Not provided") &&
-                sessionManager.getAppLanguage().equalsIgnoreCase("as")) {
-            economic_statusView.setText("প্ৰদান কৰা হোৱা নাই");
-        } else if (patient_new.getEconomic_status().equalsIgnoreCase("Not provided") &&
-                sessionManager.getAppLanguage().equalsIgnoreCase("ml")) {
-            economic_statusView.setText("നൽകിയിട്ടില്ല");
-        } else if (patient_new.getEconomic_status().equalsIgnoreCase("Not provided") &&
-                sessionManager.getAppLanguage().equalsIgnoreCase("kn")) {
-            economic_statusView.setText("ಒದಗಿಸಲಾಗಿಲ್ಲ");
-        } else if (patient_new.getEconomic_status().equalsIgnoreCase("Not provided") &&
-                sessionManager.getAppLanguage().equalsIgnoreCase("ru")) {
-            economic_statusView.setText("Не предоставлен");
-        } else if (patient_new.getEconomic_status().equalsIgnoreCase("Not provided") &&
-                sessionManager.getAppLanguage().equalsIgnoreCase("bn")) {
-            economic_statusView.setText("সরবরাহ করা হয়নি");
-        } else {
-            economic_statusView.setText(patient_new.getEconomic_status());
-            if (sessionManager.getAppLanguage().equalsIgnoreCase("hi")) {
-                String economic = switch_hi_economic_edit(patient_new.getEconomic_status());
-                economic_statusView.setText(economic);
-            } else if (sessionManager.getAppLanguage().equalsIgnoreCase("or")) {
-                String economic = switch_or_economic_edit(patient_new.getEconomic_status());
-                economic_statusView.setText(economic);
-            } else if (sessionManager.getAppLanguage().equalsIgnoreCase("ta")) {
-                String economic = switch_ta_economic_edit(patient_new.getEconomic_status());
-                economic_statusView.setText(economic);
-            } else if (sessionManager.getAppLanguage().equalsIgnoreCase("bn")) {
-                String economic = switch_bn_economic_edit(patient_new.getEconomic_status());
-                economic_statusView.setText(economic);
-            } else if (sessionManager.getAppLanguage().equalsIgnoreCase("gu")) {
-                String economic = switch_gu_economic_edit(patient_new.getEconomic_status());
-                economic_statusView.setText(economic);
-            } else if (sessionManager.getAppLanguage().equalsIgnoreCase("te")) {
-                String economic = switch_te_economic_edit(patient_new.getEconomic_status());
-                economic_statusView.setText(economic);
-            } else if (sessionManager.getAppLanguage().equalsIgnoreCase("mr")) {
-                String economic = switch_mr_economic_edit(patient_new.getEconomic_status());
-                economic_statusView.setText(economic);
-            } else if (sessionManager.getAppLanguage().equalsIgnoreCase("as")) {
-                String economic = switch_as_economic_edit(patient_new.getEconomic_status());
-                economic_statusView.setText(economic);
-            } else if (sessionManager.getAppLanguage().equalsIgnoreCase("ml")) {
-                String economic = switch_ml_economic_edit(patient_new.getEconomic_status());
-                economic_statusView.setText(economic);
-            } else if (sessionManager.getAppLanguage().equalsIgnoreCase("kn")) {
-                String economic = switch_kn_economic_edit(patient_new.getEconomic_status());
-                economic_statusView.setText(economic);
-            } else if (sessionManager.getAppLanguage().equalsIgnoreCase("ru")) {
-                String economic = switch_ru_economic_edit(patient_new.getEconomic_status());
-                economic_statusView.setText(economic);
+        if (patient_new.getEconomic_status() != null) {
+            if (patient_new.getEconomic_status().equalsIgnoreCase("Not provided") &&
+                    sessionManager.getAppLanguage().equalsIgnoreCase("hi")) {
+                economic_statusView.setText("नहीं दिया गया");
+            } else if (patient_new.getEconomic_status().equalsIgnoreCase("Not provided") &&
+                    sessionManager.getAppLanguage().equalsIgnoreCase("or")) {
+                economic_statusView.setText("ଦିଅ ଯାଇ ନାହିଁ");
+            } else if (patient_new.getEconomic_status().equalsIgnoreCase("Not provided") &&
+                    sessionManager.getAppLanguage().equalsIgnoreCase("ta")) {
+                economic_statusView.setText("வழங்கப்படவில்லை");
+            } else if (patient_new.getEconomic_status().equalsIgnoreCase("Not provided") &&
+                    sessionManager.getAppLanguage().equalsIgnoreCase("gu")) {
+                economic_statusView.setText("પૂરી પાડવામાં આવેલ નથી");
+            } else if (patient_new.getEconomic_status().equalsIgnoreCase("Not provided") &&
+                    sessionManager.getAppLanguage().equalsIgnoreCase("te")) {
+                economic_statusView.setText("సమకూర్చబడలేదు");
+            } else if (patient_new.getEconomic_status().equalsIgnoreCase("Not provided") &&
+                    sessionManager.getAppLanguage().equalsIgnoreCase("mr")) {
+                economic_statusView.setText("झाले नाही");
+            } else if (patient_new.getEconomic_status().equalsIgnoreCase("Not provided") &&
+                    sessionManager.getAppLanguage().equalsIgnoreCase("as")) {
+                economic_statusView.setText("প্ৰদান কৰা হোৱা নাই");
+            } else if (patient_new.getEconomic_status().equalsIgnoreCase("Not provided") &&
+                    sessionManager.getAppLanguage().equalsIgnoreCase("ml")) {
+                economic_statusView.setText("നൽകിയിട്ടില്ല");
+            } else if (patient_new.getEconomic_status().equalsIgnoreCase("Not provided") &&
+                    sessionManager.getAppLanguage().equalsIgnoreCase("kn")) {
+                economic_statusView.setText("ಒದಗಿಸಲಾಗಿಲ್ಲ");
+            } else if (patient_new.getEconomic_status().equalsIgnoreCase("Not provided") &&
+                    sessionManager.getAppLanguage().equalsIgnoreCase("ru")) {
+                economic_statusView.setText("Не предоставлен");
+            } else if (patient_new.getEconomic_status().equalsIgnoreCase("Not provided") &&
+                    sessionManager.getAppLanguage().equalsIgnoreCase("bn")) {
+                economic_statusView.setText("সরবরাহ করা হয়নি");
             } else {
                 economic_statusView.setText(patient_new.getEconomic_status());
+                if (sessionManager.getAppLanguage().equalsIgnoreCase("hi")) {
+                    String economic = switch_hi_economic_edit(patient_new.getEconomic_status());
+                    economic_statusView.setText(economic);
+                } else if (sessionManager.getAppLanguage().equalsIgnoreCase("or")) {
+                    String economic = switch_or_economic_edit(patient_new.getEconomic_status());
+                    economic_statusView.setText(economic);
+                } else if (sessionManager.getAppLanguage().equalsIgnoreCase("ta")) {
+                    String economic = switch_ta_economic_edit(patient_new.getEconomic_status());
+                    economic_statusView.setText(economic);
+                } else if (sessionManager.getAppLanguage().equalsIgnoreCase("bn")) {
+                    String economic = switch_bn_economic_edit(patient_new.getEconomic_status());
+                    economic_statusView.setText(economic);
+                } else if (sessionManager.getAppLanguage().equalsIgnoreCase("gu")) {
+                    String economic = switch_gu_economic_edit(patient_new.getEconomic_status());
+                    economic_statusView.setText(economic);
+                } else if (sessionManager.getAppLanguage().equalsIgnoreCase("te")) {
+                    String economic = switch_te_economic_edit(patient_new.getEconomic_status());
+                    economic_statusView.setText(economic);
+                } else if (sessionManager.getAppLanguage().equalsIgnoreCase("mr")) {
+                    String economic = switch_mr_economic_edit(patient_new.getEconomic_status());
+                    economic_statusView.setText(economic);
+                } else if (sessionManager.getAppLanguage().equalsIgnoreCase("as")) {
+                    String economic = switch_as_economic_edit(patient_new.getEconomic_status());
+                    economic_statusView.setText(economic);
+                } else if (sessionManager.getAppLanguage().equalsIgnoreCase("ml")) {
+                    String economic = switch_ml_economic_edit(patient_new.getEconomic_status());
+                    economic_statusView.setText(economic);
+                } else if (sessionManager.getAppLanguage().equalsIgnoreCase("kn")) {
+                    String economic = switch_kn_economic_edit(patient_new.getEconomic_status());
+                    economic_statusView.setText(economic);
+                } else if (sessionManager.getAppLanguage().equalsIgnoreCase("ru")) {
+                    String economic = switch_ru_economic_edit(patient_new.getEconomic_status());
+                    economic_statusView.setText(economic);
+                } else {
+                    economic_statusView.setText(patient_new.getEconomic_status());
+                }
             }
             // economic_statusView.setText(patient_new.getEconomic_status());
         }
 
-        if (patient_new.getCaste().equalsIgnoreCase("Not provided") &&
-                sessionManager.getAppLanguage().equalsIgnoreCase("hi")) {
-            casteView.setText("नहीं दिया गया");
-        } else if (patient_new.getCaste().equalsIgnoreCase("Not provided") &&
-                sessionManager.getAppLanguage().equalsIgnoreCase("or")) {
-            casteView.setText("ଦିଅ ଯାଇ ନାହିଁ");
-        } else if (patient_new.getCaste().equalsIgnoreCase("Not provided") &&
-                sessionManager.getAppLanguage().equalsIgnoreCase("te")) {
-            casteView.setText("సమకూర్చబడలేదు");
-        } else if (patient_new.getCaste().equalsIgnoreCase("Not provided") &&
-                sessionManager.getAppLanguage().equalsIgnoreCase("mr")) {
-            casteView.setText("झाले नाही");
-        } else if (patient_new.getCaste().equalsIgnoreCase("Not provided") &&
-                sessionManager.getAppLanguage().equalsIgnoreCase("as")) {
-            casteView.setText("প্ৰদান কৰা হোৱা নাই");
-        } else if (patient_new.getCaste().equalsIgnoreCase("Not provided") &&
-                sessionManager.getAppLanguage().equalsIgnoreCase("ml")) {
-            casteView.setText("നൽകിയിട്ടില്ല");
-        } else if (patient_new.getCaste().equalsIgnoreCase("Not provided") &&
-                sessionManager.getAppLanguage().equalsIgnoreCase("kn")) {
-            casteView.setText("ಒದಗಿಸಲಾಗಿಲ್ಲ");
-        } else if (patient_new.getCaste().equalsIgnoreCase("Not provided") &&
-                sessionManager.getAppLanguage().equalsIgnoreCase("ru")) {
-            casteView.setText("Не предоставлен");
-        } else if (patient_new.getCaste().equalsIgnoreCase("Not provided") &&
-                sessionManager.getAppLanguage().equalsIgnoreCase("gu")) {
-            casteView.setText("પૂરી પાડવામાં આવેલ નથી");
-        } else if (patient_new.getCaste().equalsIgnoreCase("Not provided") &&
-                sessionManager.getAppLanguage().equalsIgnoreCase("bn")) {
-            casteView.setText("সরবরাহ করা হয়নি");
-        } else if (patient_new.getCaste().equalsIgnoreCase("Not provided") &&
-                sessionManager.getAppLanguage().equalsIgnoreCase("ta")) {
-            casteView.setText("வழங்கப்படவில்லை");
-        } else {
-            casteView.setText(patient_new.getCaste());
-            if (sessionManager.getAppLanguage().equalsIgnoreCase("hi")) {
-                String caste = switch_hi_caste_edit(patient_new.getCaste());
-                casteView.setText(caste);
-            } else if (sessionManager.getAppLanguage().equalsIgnoreCase("or")) {
-                String caste = switch_or_caste_edit(patient_new.getCaste());
-                casteView.setText(caste);
-            } else if (sessionManager.getAppLanguage().equalsIgnoreCase("gu")) {
-                String caste = switch_gu_caste_edit(patient_new.getCaste());
-                casteView.setText(caste);
-            } else if (sessionManager.getAppLanguage().equalsIgnoreCase("te")) {
-                String caste = switch_te_caste_edit(patient_new.getCaste());
-                casteView.setText(caste);
-            } else if (sessionManager.getAppLanguage().equalsIgnoreCase("mr")) {
-                String caste = switch_mr_caste_edit(patient_new.getCaste());
-                casteView.setText(caste);
-            } else if (sessionManager.getAppLanguage().equalsIgnoreCase("as")) {
-                String caste = switch_as_caste_edit(patient_new.getCaste());
-                casteView.setText(caste);
-            } else if (sessionManager.getAppLanguage().equalsIgnoreCase("ml")) {
-                String caste = switch_ml_caste_edit(patient_new.getCaste());
-                casteView.setText(caste);
-            } else if (sessionManager.getAppLanguage().equalsIgnoreCase("kn")) {
-                String caste = switch_kn_caste_edit(patient_new.getCaste());
-                casteView.setText(caste);
-            } else if (sessionManager.getAppLanguage().equalsIgnoreCase("ru")) {
-                String caste = switch_ru_caste_edit(patient_new.getCaste());
-                casteView.setText(caste);
-            } else if (sessionManager.getAppLanguage().equalsIgnoreCase("bn")) {
-                String caste = switch_bn_caste_edit(patient_new.getCaste());
-                casteView.setText(caste);
-            } else if (sessionManager.getAppLanguage().equalsIgnoreCase("ta")) {
-                String caste = switch_ta_caste_edit(patient_new.getCaste());
-                casteView.setText(caste);
+        if (patient_new.getCaste() != null) {
+            if (patient_new.getCaste().equalsIgnoreCase("Not provided") &&
+                    sessionManager.getAppLanguage().equalsIgnoreCase("hi")) {
+                casteView.setText("नहीं दिया गया");
+            } else if (patient_new.getCaste().equalsIgnoreCase("Not provided") &&
+                    sessionManager.getAppLanguage().equalsIgnoreCase("or")) {
+                casteView.setText("ଦିଅ ଯାଇ ନାହିଁ");
+            } else if (patient_new.getCaste().equalsIgnoreCase("Not provided") &&
+                    sessionManager.getAppLanguage().equalsIgnoreCase("te")) {
+                casteView.setText("సమకూర్చబడలేదు");
+            } else if (patient_new.getCaste().equalsIgnoreCase("Not provided") &&
+                    sessionManager.getAppLanguage().equalsIgnoreCase("mr")) {
+                casteView.setText("झाले नाही");
+            } else if (patient_new.getCaste().equalsIgnoreCase("Not provided") &&
+                    sessionManager.getAppLanguage().equalsIgnoreCase("as")) {
+                casteView.setText("প্ৰদান কৰা হোৱা নাই");
+            } else if (patient_new.getCaste().equalsIgnoreCase("Not provided") &&
+                    sessionManager.getAppLanguage().equalsIgnoreCase("ml")) {
+                casteView.setText("നൽകിയിട്ടില്ല");
+            } else if (patient_new.getCaste().equalsIgnoreCase("Not provided") &&
+                    sessionManager.getAppLanguage().equalsIgnoreCase("kn")) {
+                casteView.setText("ಒದಗಿಸಲಾಗಿಲ್ಲ");
+            } else if (patient_new.getCaste().equalsIgnoreCase("Not provided") &&
+                    sessionManager.getAppLanguage().equalsIgnoreCase("ru")) {
+                casteView.setText("Не предоставлен");
+            } else if (patient_new.getCaste().equalsIgnoreCase("Not provided") &&
+                    sessionManager.getAppLanguage().equalsIgnoreCase("gu")) {
+                casteView.setText("પૂરી પાડવામાં આવેલ નથી");
+            } else if (patient_new.getCaste().equalsIgnoreCase("Not provided") &&
+                    sessionManager.getAppLanguage().equalsIgnoreCase("bn")) {
+                casteView.setText("সরবরাহ করা হয়নি");
+            } else if (patient_new.getCaste().equalsIgnoreCase("Not provided") &&
+                    sessionManager.getAppLanguage().equalsIgnoreCase("ta")) {
+                casteView.setText("வழங்கப்படவில்லை");
             } else {
                 casteView.setText(patient_new.getCaste());
+                if (sessionManager.getAppLanguage().equalsIgnoreCase("hi")) {
+                    String caste = switch_hi_caste_edit(patient_new.getCaste());
+                    casteView.setText(caste);
+                } else if (sessionManager.getAppLanguage().equalsIgnoreCase("or")) {
+                    String caste = switch_or_caste_edit(patient_new.getCaste());
+                    casteView.setText(caste);
+                } else if (sessionManager.getAppLanguage().equalsIgnoreCase("gu")) {
+                    String caste = switch_gu_caste_edit(patient_new.getCaste());
+                    casteView.setText(caste);
+                } else if (sessionManager.getAppLanguage().equalsIgnoreCase("te")) {
+                    String caste = switch_te_caste_edit(patient_new.getCaste());
+                    casteView.setText(caste);
+                } else if (sessionManager.getAppLanguage().equalsIgnoreCase("mr")) {
+                    String caste = switch_mr_caste_edit(patient_new.getCaste());
+                    casteView.setText(caste);
+                } else if (sessionManager.getAppLanguage().equalsIgnoreCase("as")) {
+                    String caste = switch_as_caste_edit(patient_new.getCaste());
+                    casteView.setText(caste);
+                } else if (sessionManager.getAppLanguage().equalsIgnoreCase("ml")) {
+                    String caste = switch_ml_caste_edit(patient_new.getCaste());
+                    casteView.setText(caste);
+                } else if (sessionManager.getAppLanguage().equalsIgnoreCase("kn")) {
+                    String caste = switch_kn_caste_edit(patient_new.getCaste());
+                    casteView.setText(caste);
+                } else if (sessionManager.getAppLanguage().equalsIgnoreCase("ru")) {
+                    String caste = switch_ru_caste_edit(patient_new.getCaste());
+                    casteView.setText(caste);
+                } else if (sessionManager.getAppLanguage().equalsIgnoreCase("bn")) {
+                    String caste = switch_bn_caste_edit(patient_new.getCaste());
+                    casteView.setText(caste);
+                } else if (sessionManager.getAppLanguage().equalsIgnoreCase("ta")) {
+                    String caste = switch_ta_caste_edit(patient_new.getCaste());
+                    casteView.setText(caste);
+                } else {
+                    casteView.setText(patient_new.getCaste());
+                }
+                // casteView.setText(patient_new.getCaste());
             }
-            // casteView.setText(patient_new.getCaste());
         }
 
         if (patient_new.getSdw() != null && !patient_new.getSdw().equals("")) {
@@ -1386,7 +1390,7 @@ public class PatientDetailActivity extends AppCompatActivity {
                 visitSummary.putExtra("encounterUuidAdultIntial", encounterAdultIntialslocal);
                 visitSummary.putExtra("EncounterAdultInitial_LatestVisit", encounterAdultIntials);
                 visitSummary.putExtra("name", patientName);
-                visitSummary.putExtra("patientFirstName",patientFName);
+                visitSummary.putExtra("patientFirstName", patientFName);
                 visitSummary.putExtra("patientLastName", patientLName);
                 visitSummary.putExtra("gender", mGender);
                 visitSummary.putExtra("float_ageYear_Month", float_ageYear_Month);

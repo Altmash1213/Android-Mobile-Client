@@ -229,7 +229,7 @@ public class IdentificationActivity extends AppCompatActivity implements SurveyC
 // Roster Questions
     Spinner spinner_whatisyourrelation, spinner_maritualstatus, spinner_phoneownership, spinner_bpchecked, spinner_sugarchecked, spinner_hbchecked,
             spinner_bmi, spinner_healthissuereported, spinner_primaryhealthprovider, spinner_firstlocation, spinner_referredto, spinner_modeoftransport,
-            spinner_experiencerscore, spinner_block, spinner_village, spinner_focalPointBlock;
+            spinner_experiencerscore, spinner_focalPointBlock;
 
     Spinner spinner_focalPointVillage, spinner_pregnantpasttwoyrs, spinner_outcomepregnancy, spinner_childalive, spinner_placeofdeliverypregnant,
             spinner_sexofbaby, spinner_pregnancyplanned, spinner_pregnancyhighriskcase, spinner_pregnancycomplications, spinner_singlemultiplebirths;
@@ -245,7 +245,7 @@ public class IdentificationActivity extends AppCompatActivity implements SurveyC
 
     TextInputLayout til_whatisyourrelation_other, til_occupation_other;
     LinearLayout textinputlayout_blockVillageOther;
-    TextInputEditText et_whatisyourrelation_other, et_occupation_other, et_block_other, et_village_other;
+    TextInputEditText et_whatisyourrelation_other, et_occupation_other;
 
     private TextView blockTextView, villageTextView;
 
@@ -1535,26 +1535,6 @@ public class IdentificationActivity extends AppCompatActivity implements SurveyC
 
     private void editRosterQuestionsUIHandling() {
 
-        if (patient1.getBlockSurvey() != null && !patient1.getBlockSurvey().equalsIgnoreCase("")) {
-            String block_Transl = "";
-            block_Transl = getPethBlock_edit(patient1.getBlockSurvey(), sessionManager.getAppLanguage());
-            int spinner_position = adapter_block.getPosition(block_Transl);
-            Logger.logD("Position", String.valueOf(spinner_position));
-            if (spinner_position == -1) {
-                spinner_block.setSelection(3);
-                spinner_village.setVisibility(View.GONE);
-                et_block_other.setVisibility(View.VISIBLE);
-                et_village_other.setVisibility(View.VISIBLE);
-                et_block_other.setText(patient1.getBlockSurvey());
-                et_village_other.setText(patient1.getVillageNameSurvey());
-            } else {
-                spinner_block.setSelection(spinner_position);
-                spinner_village.setVisibility(View.VISIBLE);
-                et_block_other.setVisibility(View.GONE);
-                et_village_other.setVisibility(View.GONE);
-            }
-
-        }
 
         if (patient1.getRelationshiphoh() != null && !patient1.getRelationshiphoh().equalsIgnoreCase("")) {
             String relationhoh_Transl = "";
@@ -2288,35 +2268,6 @@ public class IdentificationActivity extends AppCompatActivity implements SurveyC
 //        }
         //place delivery spinner adapter
 
-        if (!getIntent().hasExtra("newMember") && patientID_edit != null) {
-            // block
-            try {
-                String blockLanguage = "block_" + sessionManager.getAppLanguage();
-                int block_id = res.getIdentifier(blockLanguage, "array", getApplicationContext().getPackageName());
-                if (block_id != 0) {
-                    adapter_block = ArrayAdapter.createFromResource(this,
-                            block_id, android.R.layout.simple_spinner_dropdown_item);
-                }
-                spinner_block.setAdapter(adapter_block);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            // block
-
-            // village
-            //        if (spinner_block.getSelectedItemPosition() == 1) {
-            try {
-                String villageLanguage = "peth_block_village_" + sessionManager.getAppLanguage();
-                int village_id = res.getIdentifier(villageLanguage, "array", getApplicationContext().getPackageName());
-                if (village_id != 0) {
-                    adapter_FocalVillage_Peth = ArrayAdapter.createFromResource(this,
-                            village_id, android.R.layout.simple_spinner_dropdown_item);
-                }
-                spinner_village.setAdapter(adapter_FocalVillage_Peth);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     public String getYear(int syear, int smonth, int sday, int eyear, int emonth, int eday) {
@@ -3712,30 +3663,6 @@ public class IdentificationActivity extends AppCompatActivity implements SurveyC
 
     private void insertedit_RosterValuesIntoLocalDB(PatientAttributesDTO patientAttributesDTO,
                                                     @NonNull List<PatientAttributesDTO> patientAttributesDTOList) {
-
-        // block
-        patientAttributesDTO = new PatientAttributesDTO();
-        patientAttributesDTO.setUuid(UUID.randomUUID().toString());
-        patientAttributesDTO.setPatientuuid(uuid);
-        patientAttributesDTO.setPersonAttributeTypeUuid(patientsDAO.getUuidForAttribute("blockSurvey"));
-        if (spinner_block.getSelectedItemPosition() == 3) {
-            patientAttributesDTO.setValue(StringUtils.getValue(et_block_other.getText().toString()));
-        } else {
-            patientAttributesDTO.setValue(StringUtils.getPethBlock(spinner_block.getSelectedItem().toString(), sessionManager.getAppLanguage()));
-        }
-        patientAttributesDTOList.add(patientAttributesDTO);
-
-        // village
-        patientAttributesDTO = new PatientAttributesDTO();
-        patientAttributesDTO.setUuid(UUID.randomUUID().toString());
-        patientAttributesDTO.setPatientuuid(uuid);
-        patientAttributesDTO.setPersonAttributeTypeUuid(patientsDAO.getUuidForAttribute("villageNameSurvey"));
-        if (spinner_block.getSelectedItemPosition() == 3) {
-            patientAttributesDTO.setValue(StringUtils.getValue(et_village_other.getText().toString()));
-        } else {
-            patientAttributesDTO.setValue(StringUtils.getPethBlockVillage(spinner_village.getSelectedItem().toString(), sessionManager.getAppLanguage()));
-        }
-        patientAttributesDTOList.add(patientAttributesDTO);
 
         // relationsip hoh
         patientAttributesDTO = new PatientAttributesDTO();

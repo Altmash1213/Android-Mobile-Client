@@ -48,6 +48,8 @@ import android.widget.Toast;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.razorpay.Checkout;
+import com.razorpay.PaymentResultListener;
 import com.rt.printerlibrary.bean.BluetoothEdrConfigBean;
 import com.rt.printerlibrary.bean.Position;
 import com.rt.printerlibrary.cmd.Cmd;
@@ -107,7 +109,7 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.UUID;
 
-public class billConfirmationActivity extends AppCompatActivity implements PrinterObserver {
+public class billConfirmationActivity extends AppCompatActivity implements PaymentResultListener, PrinterObserver {
 
     Toolbar toolbar;
     String patientName, patientVillage, patientOpenID, patientHideVisitID, patientPhoneNum, visitType, patientVisitID, billType;
@@ -120,7 +122,7 @@ public class billConfirmationActivity extends AppCompatActivity implements Print
             cholesterolCV, bpCV, uricAcidCV, totalAmountCV, padd;
     CardView confirmBillCV, printCV, downloadCV, shareCV, finalBillCV;
     TextView consultChargeTV, followUpChargeTV, glucoseFChargeTV, glucoseRChargeTV, glucoseNFChargeTV,
-            glucosePPNChargeTV, haemoglobinChargeTV, cholesterolChargeTV, bpChargeTV,
+            glucosePPNChargeTV, haemoglobinChargeTV, cholesterolChargeTV, bpChargeTV, makePaymentCV,
             uricAcidChargeTV, totalAmountTV, payingBillTV, tv_device_selected;
     Button btn_disConnect, btn_connect;
     private ProgressBar pb_connect;
@@ -210,6 +212,7 @@ public class billConfirmationActivity extends AppCompatActivity implements Print
         uricAcidCV = findViewById(R.id.uric_acid_chargesCV);
         totalAmountCV = findViewById(R.id.total_chargesCV);
         confirmBillCV = findViewById(R.id.button_confirm_bill);
+        makePaymentCV = findViewById(R.id.button_make_payment);
         printCV = findViewById(R.id.button_print);
         downloadCV = findViewById(R.id.button_download);
         shareCV = findViewById(R.id.button_share);
@@ -252,6 +255,7 @@ public class billConfirmationActivity extends AppCompatActivity implements Print
             payingBillTV.setVisibility(View.GONE);
             radioGroup.setVisibility(View.GONE);
             confirmBillCV.setVisibility(View.GONE);
+            makePaymentCV.setVisibility(View.VISIBLE);
             printCV.setVisibility(View.VISIBLE);
             downloadCV.setVisibility(View.VISIBLE);
             shareCV.setVisibility(View.VISIBLE);
@@ -323,10 +327,18 @@ public class billConfirmationActivity extends AppCompatActivity implements Print
                     confirmBillCV.setVisibility(View.GONE);
                     if (not_paying_reasonTIL.getVisibility() == View.VISIBLE)
                         not_paying_reasonTIL.setVisibility(View.GONE);
+                    makePaymentCV.setVisibility(View.VISIBLE);
                     printCV.setVisibility(View.VISIBLE);
                     downloadCV.setVisibility(View.VISIBLE);
                     shareCV.setVisibility(View.VISIBLE);
                 }
+            }
+        });
+
+        makePaymentCV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                makePayment();
             }
         });
 
@@ -838,6 +850,43 @@ public class billConfirmationActivity extends AppCompatActivity implements Print
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    /*This function implements the Razorpay functionality
+    By: Nishita Goyal
+    Ticket: SCD-13*/
+    private void makePayment() {
+        String sAmount = String.valueOf(total_amount);
+        // rounding off the amount.
+        int amount = Math.round(Float.parseFloat(sAmount) * 100);
+        Checkout checkout = new Checkout();
+        checkout.setKeyID("rzp_test_lsxV2Ylin7dw1Y");
+        checkout.setImage(R.mipmap.ic_launcher);
+        JSONObject object = new JSONObject();
+        try {
+            object.put("name", "Smart Care Doc");
+            object.put("description", "Test payment");
+            object.put("theme.color", "#2E1E91");
+            object.put("currency", "INR");
+            object.put("amount", amount);
+            object.put("prefill.contact", "9958392968");
+            object.put("prefill.email", "nishita@intelehealth.org");
+            checkout.open(billConfirmationActivity.this, object);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onPaymentSuccess(String s) {
+        // this method is called on payment success.
+        Toast.makeText(this, "Payment is successful : " + s, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onPaymentError(int i, String s) {
+        // on payment failed.
+        Toast.makeText(this, "Payment Failed due to error : " + s, Toast.LENGTH_SHORT).show();
     }
 
     //This will open a Dialog that will show all the Bluetooth devices...
