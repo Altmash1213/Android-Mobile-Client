@@ -120,9 +120,9 @@ public class billConfirmationActivity extends AppCompatActivity implements Payme
     String billDateString = "DD MM YYYY";
     LinearLayout consultCV, followUPCV, glucoseFCV, glucoseRCV, glucoseNFCV, glucosePPNCV, haemoglobinCV,
             cholesterolCV, bpCV, uricAcidCV, totalAmountCV, padd;
-    CardView confirmBillCV, printCV, downloadCV, shareCV, finalBillCV;
+    CardView confirmBillCV, printCV, downloadCV, shareCV, finalBillCV, makePaymentCV;
     TextView consultChargeTV, followUpChargeTV, glucoseFChargeTV, glucoseRChargeTV, glucoseNFChargeTV,
-            glucosePPNChargeTV, haemoglobinChargeTV, cholesterolChargeTV, bpChargeTV, makePaymentCV,
+            glucosePPNChargeTV, haemoglobinChargeTV, cholesterolChargeTV, bpChargeTV,
             uricAcidChargeTV, totalAmountTV, payingBillTV, tv_device_selected;
     Button btn_disConnect, btn_connect;
     private ProgressBar pb_connect;
@@ -620,7 +620,7 @@ public class billConfirmationActivity extends AppCompatActivity implements Payme
 
     private void setPrices() {
         if (consultCV.getVisibility() == View.VISIBLE) {
-            String price = conceptAttributeListDAO.getConceptPrice("Billing Visit Type Consultation");
+            String price = conceptAttributeListDAO.getConceptPrice("Billing Visit Type");
             price = getPrice(price, price.indexOf('.'));
             consultChargeTV.setText("₹" + price + "/-");
             total_amount += Integer.parseInt(price);
@@ -656,19 +656,19 @@ public class billConfirmationActivity extends AppCompatActivity implements Payme
             total_amount += Integer.parseInt(price);
         }
         if (uricAcidCV.getVisibility() == View.VISIBLE) {
-            String price = conceptAttributeListDAO.getConceptPrice("SERUM URIC ACID");
+            String price = conceptAttributeListDAO.getConceptPrice("Uric Acid Measurement");
             price = getPrice(price, price.indexOf('.'));
             uricAcidChargeTV.setText("₹" + price + "/-");
             total_amount += Integer.parseInt(price);
         }
         if (haemoglobinCV.getVisibility() == View.VISIBLE) {
-            String price = conceptAttributeListDAO.getConceptPrice("Haemoglobin Test");
+            String price = conceptAttributeListDAO.getConceptPrice("Haemoglobin");
             price = getPrice(price, price.indexOf('.'));
             haemoglobinChargeTV.setText("₹" + price + "/-");
             total_amount += Integer.parseInt(price);
         }
         if (cholesterolCV.getVisibility() == View.VISIBLE) {
-            String price = conceptAttributeListDAO.getConceptPrice("TOTAL CHOLESTEROL");
+            String price = conceptAttributeListDAO.getConceptPrice("Cholesterol");
             price = getPrice(price, price.indexOf('.'));
             cholesterolChargeTV.setText("₹" + price + "/-");
             total_amount += Integer.parseInt(price);
@@ -684,7 +684,11 @@ public class billConfirmationActivity extends AppCompatActivity implements Payme
     }
 
     private String getPrice(String price, int indexOf) {
-        return price.substring(0, indexOf);
+        if(price!=null && price.length()>1 && price.contains("."))
+            return price.substring(0, indexOf);
+        else
+            return "0";
+
     }
 
     private void manageCardView(ArrayList<String> selectedTests) {
@@ -854,7 +858,7 @@ public class billConfirmationActivity extends AppCompatActivity implements Payme
 
     /*This function implements the Razorpay functionality
     By: Nishita Goyal
-    Ticket: SCD-13*/
+    Ticket: IDA4-275*/
     private void makePayment() {
         String sAmount = String.valueOf(total_amount);
         // rounding off the amount.
@@ -864,7 +868,7 @@ public class billConfirmationActivity extends AppCompatActivity implements Payme
         checkout.setImage(R.mipmap.ic_launcher);
         JSONObject object = new JSONObject();
         try {
-            object.put("name", "Smart Care Doc");
+            object.put("name", "Intelehealth");
             object.put("description", "Test payment");
             object.put("theme.color", "#2E1E91");
             object.put("currency", "INR");
