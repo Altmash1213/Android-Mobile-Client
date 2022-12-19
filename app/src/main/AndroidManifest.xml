@@ -356,6 +356,17 @@
                     android:enabled="true" />
             </intent-filter>
         </receiver>
+
+        <provider
+            android:authorities="org.intelehealth.app.fileprovider"
+            android:name="androidx.core.content.FileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_path"/>
+        </provider>
+
         <receiver
             android:name=".services.firebase_services.RestartServiceReceiver"
             android:exported="false">
