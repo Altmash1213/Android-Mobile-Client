@@ -1039,6 +1039,7 @@
                 android:layout_marginHorizontal="30dp"
                 app:cardElevation="8dp"
                 app:cardCornerRadius="10dp"
+                android:visibility="gone"
                 android:layout_marginBottom="20dp"
                 android:layout_marginTop="16dp">
 
@@ -1068,6 +1069,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:visibility="gone"
                     android:orientation="vertical">
 
                     <RelativeLayout
