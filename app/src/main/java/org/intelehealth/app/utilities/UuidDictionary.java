@@ -86,9 +86,9 @@ public class UuidDictionary {
     public static final String BILL_PRICE_BLOOD_GLUCOSE_RANDOM_ID = "d7670f6a-377f-4807-92c8-26dc339fb0fe";
     public static final String BILL_PRICE_BLOOD_GLUCOSE_POST_PRANDIAL_ID = "790cbe32-4a85-4953-a3a6-4f6b0e26336e";
     public static final String BILL_PRICE_HEMOGLOBIN_ID = "71f0aadf-2a15-420f-897a-145dfc87fcd1";
-    public static final String BILL_PRICE_URIC_ACID_ID = "1bc5c17b-3904-44f0-9830-dad9627ca86e";
-    public static final String BILL_PRICE_TOTAL_CHOLESTEROL_ID = "90647d4d-fd78-45bf-ae3e-408d43b55303";
-    public static final String BILL_PRICE_BP_ID = "ff9fb086-9c56-437a-bca5-62bc00ab7558";
+    public static final String BILL_PRICE_URIC_ACID_ID = "e331ccc4-7995-41d5-abe6-15b3e5ead1b1";
+    public static final String BILL_PRICE_TOTAL_CHOLESTEROL_ID = "9d2f0fcc-538f-11e6-9cfe-86f436325720";
+    public static final String BILL_PRICE_BP_ID = "dd51ab03-12ef-43cb-9aef-2ec93a989816";
     public static final String BILL_NUM = "9fa03f61-8083-4cce-bbc0-d5f752a8ee7b";
 
 

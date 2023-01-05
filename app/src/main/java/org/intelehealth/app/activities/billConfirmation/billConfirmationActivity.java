@@ -617,10 +617,9 @@ public class billConfirmationActivity extends AppCompatActivity implements Payme
         startActivity(Intent.createChooser(intent, "Share the file...."));
     }
 
-
     private void setPrices() {
         if (consultCV.getVisibility() == View.VISIBLE) {
-            String price = conceptAttributeListDAO.getConceptPrice("Billing Visit Type");
+            String price = conceptAttributeListDAO.getConceptPrice("Billing Visit Type Consultation");
             price = getPrice(price, price.indexOf('.'));
             consultChargeTV.setText("₹" + price + "/-");
             total_amount += Integer.parseInt(price);
@@ -656,19 +655,19 @@ public class billConfirmationActivity extends AppCompatActivity implements Payme
             total_amount += Integer.parseInt(price);
         }
         if (uricAcidCV.getVisibility() == View.VISIBLE) {
-            String price = conceptAttributeListDAO.getConceptPrice("Uric Acid Measurement");
+            String price = conceptAttributeListDAO.getConceptPrice("SERUM URIC ACID");
             price = getPrice(price, price.indexOf('.'));
             uricAcidChargeTV.setText("₹" + price + "/-");
             total_amount += Integer.parseInt(price);
         }
         if (haemoglobinCV.getVisibility() == View.VISIBLE) {
-            String price = conceptAttributeListDAO.getConceptPrice("Haemoglobin");
+            String price = conceptAttributeListDAO.getConceptPrice("Haemoglobin Test");
             price = getPrice(price, price.indexOf('.'));
             haemoglobinChargeTV.setText("₹" + price + "/-");
             total_amount += Integer.parseInt(price);
         }
         if (cholesterolCV.getVisibility() == View.VISIBLE) {
-            String price = conceptAttributeListDAO.getConceptPrice("Cholesterol");
+            String price = conceptAttributeListDAO.getConceptPrice("TOTAL CHOLESTEROL");
             price = getPrice(price, price.indexOf('.'));
             cholesterolChargeTV.setText("₹" + price + "/-");
             total_amount += Integer.parseInt(price);

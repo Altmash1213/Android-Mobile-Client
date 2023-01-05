@@ -1572,5 +1572,6 @@
     <string name="answer_following_questions">Following are the compulsory questions, Please answer them.</string>
     <string name="and">”, and “</string>
     <string name="protocol_download_failed_alertdialog">Unable to download protocol. Press \'yes\' to retry the protocol download. Press \'No\' to continue with the demo protocol.</string>
+    <string name="view_bill">View Bill</string>
     <!--Appointment END-->
 </resources>
