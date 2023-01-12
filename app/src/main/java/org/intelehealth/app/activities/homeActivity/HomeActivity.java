@@ -597,6 +597,9 @@ public class HomeActivity extends AppCompatActivity implements
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_home, menu);
+        boolean isChecked = sessionManager.isEnableAppLock();
+        MenuItem item = menu.findItem(R.id.fingerprintLock);
+        item.setChecked(isChecked);
         bluetoothCheck = menu.findItem(R.id.bluetooth);
 
         if(mService.getStatus() == BluetoothStatus.CONNECTED) {
@@ -840,6 +843,7 @@ public class HomeActivity extends AppCompatActivity implements
 
                 return true;
 
+
             case R.id.restAppOption:
 
                 if ((isNetworkConnected())) {
@@ -864,6 +868,15 @@ public class HomeActivity extends AppCompatActivity implements
                     dialogUtils.showOkDialog(this, getString(R.string.error_network), getString(R.string.no_network_sync), getString(R.string.generic_ok));
                 }
 
+            case R.id.fingerprintLock:
+                if(item.isChecked()) {
+                    sessionManager.setEnableAppLock(false);
+                    item.setChecked(false);
+                }
+                else {
+                    sessionManager.setEnableAppLock(true);
+                    item.setChecked(true);
+                }
             default:
                 return super.onOptionsItemSelected(item);
         }
