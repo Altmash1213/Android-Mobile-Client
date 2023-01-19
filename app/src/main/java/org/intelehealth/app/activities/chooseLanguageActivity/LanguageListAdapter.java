@@ -107,12 +107,7 @@ public class LanguageListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     }
                 }
             });
-
         }
-
-
     }
-
-
 }
 

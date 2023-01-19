@@ -13,6 +13,7 @@
         <item
             android:id="@+id/draftSurvey"
             android:orderInCategory="100"
+            android:visible="false"
             android:title="@string/draft_survey_title" />
 
         <item

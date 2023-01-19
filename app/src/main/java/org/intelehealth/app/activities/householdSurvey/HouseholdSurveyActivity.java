@@ -199,7 +199,8 @@ public class HouseholdSurveyActivity extends AppCompatActivity implements View.O
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            answerChecking(true);
+//            answerChecking(true);
+            onBackPressed();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -207,7 +208,9 @@ public class HouseholdSurveyActivity extends AppCompatActivity implements View.O
 
     @Override
     public void onBackPressed() {
-        answerChecking(true);
+        //the logic for this needs to be changed, so commenting it for now.
+//        answerChecking(true);
+        finish();
     }
 
     private void answerChecking(boolean isDraftMode) {

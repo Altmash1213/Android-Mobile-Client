@@ -50,6 +50,7 @@
                 android:fontFamily="@font/lato_regular"
                 android:text="@string/choose_lang_title"
                 android:textAlignment="viewStart"
+                android:id="@+id/choose_lang_title"
                 android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                 android:textColor="@color/gray_6"
                 android:textSize="24dip"

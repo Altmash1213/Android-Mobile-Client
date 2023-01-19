@@ -13,11 +13,13 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.LocaleList;
 import android.util.DisplayMetrics;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import org.intelehealth.app.R;
 import org.intelehealth.app.activities.IntroActivity.IntroActivity;
@@ -46,6 +48,7 @@ public class ChooseLanguageActivity extends AppCompatActivity {
     private List<JSONObject> mItemList = new ArrayList<JSONObject>();
     Intent intent;
     String intentType;
+    TextView headingTV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,7 +104,6 @@ public class ChooseLanguageActivity extends AppCompatActivity {
 
     }
 
-
     public void initViews() {
         mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
@@ -109,18 +111,19 @@ public class ChooseLanguageActivity extends AppCompatActivity {
         mToolbar.setTitleTextColor(Color.WHITE);
         sessionManager = new SessionManager(ChooseLanguageActivity.this);
         appLanguage = sessionManager.getAppLanguage();
-//        setLocale(appLanguage);
+        setLocale(ChooseLanguageActivity.this);
         mRecyclerView = findViewById(R.id.language_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         SaveButton = findViewById(R.id.save_button);
         BackImage = findViewById(R.id.backButton);
+        headingTV = findViewById(R.id.choose_lang_title);
+        headingTV.setText(getResources().getString(R.string.choose_lang_title));
         intent = getIntent();
         intentType = intent.getStringExtra("intentType");
-
         if(intentType.equalsIgnoreCase("home")) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowTitleEnabled(true);
-            setTitle(R.string.languages);
+            setTitle(getResources().getString(R.string.languages));
         }
     }
 
@@ -156,18 +159,6 @@ public class ChooseLanguageActivity extends AppCompatActivity {
         }
     }
 
-    //this language code is no longer required as we are moving towards more optimised as well as generic code for localisation. Check "attachBaseContext".
-    public void setLocale(String appLanguage) {
-        final Locale myLocale = new Locale(appLanguage);
-        Locale.setDefault(myLocale);
-        saveLocale(appLanguage);
-        Resources res = getResources();
-        DisplayMetrics dm = res.getDisplayMetrics();
-        Configuration conf = res.getConfiguration();
-        conf.locale = myLocale;
-        res.updateConfiguration(conf, dm);
-    }
-
     public interface ItemSelectionListener {
         void onSelect(JSONObject jsonObject, int index);
     }
@@ -188,4 +179,20 @@ public class ChooseLanguageActivity extends AppCompatActivity {
         super.attachBaseContext(LocaleHelper.setLocale(newBase));
     }
 
+    public void setLocale(Context context) {
+        SessionManager sessionManager1 = new SessionManager(context);
+        String appLanguage = sessionManager1.getAppLanguage();
+        if (!appLanguage.isEmpty()) {
+            Resources res = context.getResources();
+            Configuration conf = res.getConfiguration();
+            Locale locale = new Locale(appLanguage);
+            Locale.setDefault(locale);
+            conf.setLocale(locale);
+            context.createConfigurationContext(conf);
+            DisplayMetrics dm = res.getDisplayMetrics();
+            conf.setLocales(new LocaleList(locale));
+            res.updateConfiguration(conf, dm);
+        }
+        return;
+    }
 }
