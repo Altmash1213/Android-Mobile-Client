@@ -77,11 +77,11 @@ import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.WorkManager;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.firebase.BuildConfig;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.healthcubed.ezdxlib.bluetoothHandler.BluetoothService;
 import com.healthcubed.ezdxlib.bluetoothHandler.BluetoothStatus;
 
+import org.intelehealth.app.BuildConfig;
 import org.intelehealth.app.R;
 import org.intelehealth.app.activities.activePatientsActivity.ActivePatientActivity;
 import org.intelehealth.app.activities.devicesActivity.DevicesActivity;
