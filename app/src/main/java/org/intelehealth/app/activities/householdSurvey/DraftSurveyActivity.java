@@ -136,14 +136,14 @@ public class  DraftSurveyActivity extends AppCompatActivity {
 //        db.beginTransaction();
         try {
 //            String query = "SELECT * from tbl_patient_attribute as c WHERE c.patientuuid = '" + patientuuid + "' and c.modified_date = (SELECT max(d.modified_date) from tbl_patient_attribute as d where d.person_attribute_type_uuid = c.person_attribute_type_uuid) group by person_attribute_type_uuid";
-            String query = "SELECT * from tbl_patient_attribute as c WHERE c.patientuuid = ? and c.modified_date = (SELECT max(d.modified_date) from tbl_patient_attribute as d where d.person_attribute_type_uuid = c.person_attribute_type_uuid) group by person_attribute_type_uuid";
-
+            String query = "SELECT * from tbl_patient_attribute as c WHERE c.patientuuid = ? and c.modified_date = (SELECT max(d.modified_date) from tbl_patient_attribute as d where d.person_attribute_type_uuid = c.person_attribute_type_uuid) and draft_status = 'true' group by person_attribute_type_uuid";
             String[] args = new String[]{patientuuid};
             Cursor cursor = db.rawQuery(query, args, null);
             Attribute attribute = new Attribute();
             if (cursor.moveToFirst() && !cursor.isClosed()) {
                 while (!cursor.isAfterLast() && !cursor.isClosed()) {
-                    attribute = new Attribute();
+                    draft = true;
+                    /*attribute = new Attribute();
                     attribute.setAttributeType(cursor.getString(cursor.getColumnIndex("person_attribute_type_uuid")));
                     attribute.setValue(cursor.getString(cursor.getColumnIndex("value")));
                     name = patientsDAO.getAttributesName(attribute.getAttributeType());
@@ -245,7 +245,7 @@ public class  DraftSurveyActivity extends AppCompatActivity {
                         draft = true;
                     } else if (name.equalsIgnoreCase("nearestTertiaryCareFacility") && condition) {
                         draft = true;
-                    }
+                    }*/
 
                     if (draft) {
                         PatientDTO patientDTO = new PatientDTO();
